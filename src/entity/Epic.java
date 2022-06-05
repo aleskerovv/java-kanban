@@ -5,11 +5,16 @@ import java.util.List;
 public class Epic extends Task {
     private String title;
     private String description;
-    private int id;
+    private Long id;
     private String status;
     private List<SubTask> subtasks;
 
-    public String setStatus() {
+    public void setStatus() {
+        checkStatus();
+    }
+
+    //Произвожу расчет статуса Epic при всех возможных статусах SubTask
+    public String checkStatus() {
         if (subtasks.isEmpty()) return this.status = "NEW";
 
         boolean isDone = false;
@@ -29,29 +34,13 @@ public class Epic extends Task {
             }
         }
 
-        if (isDone)
+        if (isDone) {
             return this.status = "DONE";
-        else if (isNew)
+        } else if (isNew) {
             return this.status = "NEW";
-        else
+        } else {
             return this.status = "IN_PROGRESS";
-//        for (SubTask subTask : subtasks) {
-//            if (subTask.getStatus().equals("IN_PROGRESS")) {
-//                this.status = "IN_PROGRESS";
-//                return;
-//            }
-//            if (subtasks.size() > 1) {
-//                if (subTask.getStatus().equals("DONE") && !subTask.checkSubTaskStatus(subtasks.indexOf(subTask) - 1)) {
-//                    this.status = "IN_PROGRESS";
-//                    return;
-//                }
-//            }
-//        }
-//        if (subtasks.get(0).getStatus().equals("NEW")) {
-//            this.status = "NEW";
-//        } else if (subtasks.get(0).getStatus().equals("DONE")) {
-//            this.status = "DONE";
-//        }
+        }
     }
 
     public String getStatus() {
@@ -69,12 +58,12 @@ public class Epic extends Task {
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @Override
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -89,16 +78,15 @@ public class Epic extends Task {
     @Override
     public String toString() {
         String result = "Epic{" +
-                "title=" + title +
-                ", description=" + description +
+                "Title=" + title +
+                ", Description=" + description +
                 ", id=" + id +
-                ", status=" + getStatus() + '\'';
-        if(!subtasks.isEmpty()) {
-            result = result + ", subtasks=" + subtasks + '}';
+                ", Status=" + getStatus();
+        if (!subtasks.isEmpty()) {
+            result = result + ", Subtasks=" + subtasks + "}";
         } else {
-            result = result + ", subtasks=Нет активных подзадач}";
+            result = result + ", Subtasks=Нет активных подзадач}";
         }
-
         return result;
     }
 }

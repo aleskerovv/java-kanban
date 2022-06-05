@@ -1,11 +1,9 @@
 package entity;
 
-import java.util.Objects;
-
 public class SubTask extends Task {
     private String title;
     private String description;
-    private int id;
+    private Long id;
     private String status;
 
     @Override
@@ -19,12 +17,12 @@ public class SubTask extends Task {
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @Override
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -37,25 +35,13 @@ public class SubTask extends Task {
         return status;
     }
 
-    public boolean checkSubTaskStatus(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SubTask subTask = (SubTask) o;
-        return Objects.equals(status, subTask.status);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(status);
-    }
-
     @Override
     public String toString() {
         String result = "SubTask{" +
-                "title=" + title +
-                ", description=" + description +
+                "Title=" + title +
+                ", Description=" + description +
                 ", id=" + id +
-                ", status=" + status + '}';
+                ", Status=" + status + "}";
 
         return result;
     }

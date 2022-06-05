@@ -3,7 +3,7 @@ package entity;
 public class Task {
     private String title;
     private String description;
-    private int id;
+    private Long id;
     private String status;
 
     public void setTitle(String title) {
@@ -14,11 +14,11 @@ public class Task {
         this.description = description;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -28,11 +28,10 @@ public class Task {
 
     public String toString() {
         String result = "Task{" +
-                "title=" + title +
-                ", description=" + description +
+                "Title=" + title +
+                ", Description=" + description +
                 ", id=" + id +
-                ", status=" + status + '}';
-
+                ", Status=" + status + "}";
         return result;
     }
 }
