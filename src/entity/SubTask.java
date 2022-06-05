@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Objects;
+
 public class SubTask extends Task {
     private String title;
     private String description;
@@ -33,6 +35,18 @@ public class SubTask extends Task {
 
     public String getStatus() {
         return status;
+    }
+
+    public boolean checkSubTaskStatus(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SubTask subTask = (SubTask) o;
+        return Objects.equals(status, subTask.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(status);
     }
 
     @Override

@@ -8,12 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 public class Manager {
-    Map<Integer, Object> tasksList = new HashMap<>();
+    Map<Integer, Object> taskManager = new HashMap<>();
 
     Map<Integer, Task> tasks = new HashMap<>();
 
     public void createTask(Task task) {
         tasks.put(task.getId(), task);
+        taskManager.put(taskManager.size() + 1, task);
+    }
+
+    public String getAllTaskList() {
+        return String.valueOf(taskManager.values());
     }
 
     public String getTasks() {
@@ -42,10 +47,12 @@ public class Manager {
 
     public void createEpic(Epic epic) {
         epics.put(epic.getId(), epic);
+        taskManager.put(taskManager.size() + 1, epic);
     }
 
     public void createSubtask(SubTask subTask) {
         subTasks.put(subTask.getId(), subTask);
+        taskManager.put(taskManager.size() + 1, subTask);
     }
 
     public String getEpics() {

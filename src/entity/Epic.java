@@ -9,19 +9,48 @@ public class Epic extends Task {
     private String status;
     private List<SubTask> subtasks;
 
-    public void setStatus() {
+    public String setStatus() {
+        if (subtasks.isEmpty()) return this.status = "NEW";
 
-        if (subtasks.isEmpty()) {
-            this.status = "NEW";
+        boolean isDone = false;
+        boolean isNew = false;
+        for (SubTask subTask : subtasks) {
+            switch (subTask.getStatus()) {
+                case "NEW":
+                    if (isDone) return this.status = "IN_PROGRESS";
+                    isNew = true;
+                    break;
+                case "DONE":
+                    if (isNew) return this.status = "IN_PROGRESS";
+                    isDone = true;
+                    break;
+                case "IN_PROGRESS":
+                    return this.status = "IN_PROGRESS";
+            }
         }
+
+        if (isDone)
+            return this.status = "DONE";
+        else if (isNew)
+            return this.status = "NEW";
+        else
+            return this.status = "IN_PROGRESS";
 //        for (SubTask subTask : subtasks) {
-//            if (subTask.getStatus().equals("NEW")) {
-//                this.status = "NEW";
-//            } else if (subTask.getStatus().equals("DONE")) {
-//                this.status = "DONE";
-//            } else {
+//            if (subTask.getStatus().equals("IN_PROGRESS")) {
 //                this.status = "IN_PROGRESS";
+//                return;
 //            }
+//            if (subtasks.size() > 1) {
+//                if (subTask.getStatus().equals("DONE") && !subTask.checkSubTaskStatus(subtasks.indexOf(subTask) - 1)) {
+//                    this.status = "IN_PROGRESS";
+//                    return;
+//                }
+//            }
+//        }
+//        if (subtasks.get(0).getStatus().equals("NEW")) {
+//            this.status = "NEW";
+//        } else if (subtasks.get(0).getStatus().equals("DONE")) {
+//            this.status = "DONE";
 //        }
     }
 
