@@ -1,48 +1,26 @@
 package entity;
 
 public class SubTask extends Task {
-    private String title;
-    private String description;
-    private Long id;
-    private String status;
+    protected Epic epic;
 
-    @Override
-    public void setTitle(String title) {
+    public SubTask(String title, String description, String status, Epic epic) {
         this.title = title;
-    }
-
-    @Override
-    public void setDescription(String description) {
         this.description = description;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setStatus(String status) {
         this.status = status;
+        this.epic = epic;
     }
 
-    public String getStatus() {
-        return status;
+    public Epic getEpic() {
+        return epic;
     }
 
     @Override
     public String toString() {
-        String result = "SubTask{" +
+        return "SubTask{" +
                 "Title=" + title +
                 ", Description=" + description +
                 ", id=" + id +
-                ", Status=" + status + "}";
-
-        return result;
+                ", Status=" + status +
+                ", Epic=" + epic.getTitle() + "}";
     }
 }
