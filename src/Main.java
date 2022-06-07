@@ -26,6 +26,8 @@ public class Main {
         SubTask thirdSubTask = new SubTask("Третья сабтаска", "Проверка третьего сабтаска", "IN_PROGRESS", anotherEpic);
         mng.createSubtask(thirdSubTask);
 
+        //Николай, привет. Тесты закомментил, что бы было удобнее открывать каждый отдельно.
+
         //Проверка обновления статуса у эпика, если убрать у него все задачи
 /*        System.out.println(mng.findEpicById(5));
         mng.deleteSubTaskById(6);
