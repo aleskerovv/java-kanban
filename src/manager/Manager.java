@@ -3,6 +3,8 @@ package manager;
 import entity.Epic;
 import entity.SubTask;
 import entity.Task;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +31,7 @@ public class Manager {
         if (tasks.isEmpty()) {
             System.out.println("Список задач пуст");
         }
-        return (List<Task>) tasks.values();
+        return new ArrayList<>(tasks.values());
     }
 
     public Task findTasksById(Integer id) {
@@ -60,11 +62,11 @@ public class Manager {
         taskManager.put(epic.getId(), epic);
     }
 
-    public Object getEpics() {
+    public List<Epic> getEpics() {
         if (epics.isEmpty()) {
-            return "Список Эпиков пуст";
+            System.out.println("Список Эпиков пуст");
         }
-        return epics.values();
+        return new ArrayList<>(epics.values());
     }
 
     public Epic findEpicById(Integer id) {
@@ -105,11 +107,11 @@ public class Manager {
         subTask.getEpic().setStatus();
     }
 
-    public Object getSubtasks() {
+    public List<SubTask> getSubtasks() {
         if (subTasks.isEmpty()) {
-            return "Список Подзадач пуст";
+            System.out.println("Список Подзадач пуст");
         }
-        return subTasks.values();
+        return new ArrayList<>(subTasks.values());
     }
 
     public SubTask findSubTasksById(Integer id) {

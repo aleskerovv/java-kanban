@@ -41,7 +41,7 @@ public class Main {
 
         //Проверка на удаление всех эпиков(вместе с ними и сабтасок) и тасок
 /*        mng.clearTasks();
-        mng.clearEpicsList();
+        mng.clearEpicsList(); //Что бы проверить корректность удаления сабтасок везде - mng.clearSubtasksList();
         System.out.println(mng.getAllTaskList());
         System.out.println(mng.getTasks());
         System.out.println(mng.getEpics());
