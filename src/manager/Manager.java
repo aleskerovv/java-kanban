@@ -3,8 +3,8 @@ package manager;
 import entity.Epic;
 import entity.SubTask;
 import entity.Task;
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Manager {
@@ -25,11 +25,11 @@ public class Manager {
         taskManager.put(task.getId(), task);
     }
 
-    public Object getTasks() {
+    public List<Task> getTasks() {
         if (tasks.isEmpty()) {
-            return "Список задач пуст";
+            System.out.println("Список задач пуст");
         }
-        return tasks.values();
+        return (List<Task>) tasks.values();
     }
 
     public Task findTasksById(Integer id) {
@@ -119,6 +119,9 @@ public class Manager {
     public void clearSubtasksList() {
         for (SubTask subTask : subTasks.values()) {
             taskManager.remove(subTask.getId());
+        }
+        for (SubTask subTask : subTasks.values()) {
+            subTasks.get(subTask.getId()).getEpic().getSubtasks().clear();
         }
         subTasks.clear();
     }
