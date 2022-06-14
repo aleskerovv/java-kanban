@@ -3,10 +3,8 @@ package entity;
 public class SubTask extends Task {
     protected Epic epic;
 
-    public SubTask(String title, String description, String status, Epic epic) {
-        this.title = title;
-        this.description = description;
-        this.status = status;
+    public SubTask(String title, String description, TaskStatus status, Epic epic) {
+        super(title, description, status);
         this.epic = epic;
     }
 

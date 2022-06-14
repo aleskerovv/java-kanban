@@ -5,10 +5,12 @@ import java.util.List;
 
 public class Epic extends Task {
     protected List<SubTask> subTasks = new ArrayList<>();
+    static final TaskStatus NEW = TaskStatus.NEW;
+    static final TaskStatus IN_PROGRESS = TaskStatus.IN_PROGRESS;
+    static final TaskStatus DONE = TaskStatus.DONE;
 
     public Epic(String title, String description) {
-        this.title = title;
-        this.description = description;
+        super(title, description);
     }
 
     public void setStatus() {
@@ -18,7 +20,7 @@ public class Epic extends Task {
     //Произвожу расчет статуса Epic при всех возможных статусах SubTask
     public void checkStatus() {
         if (subTasks.isEmpty()) {
-            this.status = "NEW";
+            this.status = NEW;
             return;
         }
 
@@ -26,32 +28,32 @@ public class Epic extends Task {
         boolean isNew = false;
         for (SubTask subTask : subTasks) {
             switch (subTask.getStatus()) {
-                case "NEW":
+                case NEW:
                     if (isDone) {
-                        this.status = "IN_PROGRESS";
+                        this.status = IN_PROGRESS;
                         return;
                     }
                     isNew = true;
                     break;
-                case "DONE":
+                case DONE:
                     if (isNew) {
-                        this.status = "IN_PROGRESS";
+                        this.status = IN_PROGRESS;
                         return;
                     }
                     isDone = true;
                     break;
-                case "IN_PROGRESS":
-                    this.status = "IN_PROGRESS";
+                case IN_PROGRESS:
+                    this.status = IN_PROGRESS;
                     return;
             }
         }
 
         if (isDone) {
-            this.status = "DONE";
+            this.status = DONE;
         } else if (isNew) {
-            this.status = "NEW";
+            this.status = NEW;
         } else {
-            this.status = "IN_PROGRESS";
+            this.status = IN_PROGRESS;
         }
     }
 
