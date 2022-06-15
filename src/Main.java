@@ -40,7 +40,7 @@ public class Main {
         mng.findSubTasksById(5);
         mng.findSubTasksById(5);
 //        mng.findSubTasksById(5); //Добавил в поиск 11 экземпляр, если раскомментировать и запустить, то он добавится в конец, а самый старый экземпляр удалится
-        System.out.println(InMemoryTaskManager.historyManager.getHistory());
+        System.out.println(mng.getHistory());
 //        Есть вопрос, касаемо вывода истории просмотров. Правильно ли реализован доступ к методу?
     }
 }

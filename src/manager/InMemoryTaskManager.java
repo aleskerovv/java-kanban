@@ -174,6 +174,11 @@ public class InMemoryTaskManager implements TaskManager {
         System.out.println(epic.getSubtasks());
     }
 
+    @Override
+    public List<Task> getHistory() {
+       return historyManager.getHistory();
+    }
+
     private Integer getNextId() {
         return taskManager.size() + 1;
     }
