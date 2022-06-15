@@ -65,6 +65,14 @@ public class Epic extends Task {
         return subTasks;
     }
 
+    public void clearSubtasks() {
+        subTasks.clear();
+    }
+
+    public void deleteSubTuskById(int id) {
+        subTasks.remove(id);
+    }
+
     @Override
     public String toString() {
         String result = "Epic{" +

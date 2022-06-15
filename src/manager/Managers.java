@@ -1,7 +1,5 @@
 package manager;
 
-import entity.Task;
-
 public class Managers {
 
     private Managers() {

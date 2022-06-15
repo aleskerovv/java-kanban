@@ -143,16 +143,15 @@ public class InMemoryTaskManager implements TaskManager {
     public void clearSubtasksList() {
         for (SubTask subTask : subTasks.values()) {
             taskManager.remove(subTask.getId());
+            subTasks.get(subTask.getId()).getEpic().clearSubtasks();
         }
-        for (SubTask subTask : subTasks.values()) {
-            subTasks.get(subTask.getId()).getEpic().getSubtasks().clear();
-        }
+
         subTasks.clear();
     }
 
     @Override
     public void deleteSubTaskById(Integer id) {
-        subTasks.get(id).getEpic().getSubtasks().remove(subTasks.get(id));
+        subTasks.get(id).getEpic().deleteSubTuskById(id);
         subTasks.get(id).getEpic().setStatus();
         subTasks.remove(id);
         taskManager.remove(id);
@@ -175,8 +174,7 @@ public class InMemoryTaskManager implements TaskManager {
         System.out.println(epic.getSubtasks());
     }
 
-    @Override
-    public Integer getNextId() {
+    private Integer getNextId() {
         return taskManager.size() + 1;
     }
 }
