@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Objects;
+
 public class SubTask extends Task {
     protected Epic epic;
 
@@ -10,6 +12,23 @@ public class SubTask extends Task {
 
     public Epic getEpic() {
         return epic;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SubTask subTask = (SubTask) o;
+        return Objects.equals(getTitle(), subTask.getTitle())
+                && Objects.equals(getDescription(), subTask.getDescription())
+                && Objects.equals(getStatus(), subTask.getStatus())
+                && Objects.equals(getId(), subTask.getId())
+                && Objects.equals(getEpic(), subTask.getEpic());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, status, id, epic);
     }
 
     @Override
