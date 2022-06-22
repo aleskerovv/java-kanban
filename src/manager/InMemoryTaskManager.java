@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    protected final Map<Integer, Task> taskManager;
-    public static final HistoryManager historyManager = Managers.getDefaultHistory();
+    private final Map<Integer, Task> taskManager;
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     public InMemoryTaskManager() {
         this.taskManager = new HashMap<>();
@@ -19,6 +19,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getAllTaskList() {
+        if (taskManager.isEmpty()) {
+            System.out.println("Task list is empty");
+        }
         return new ArrayList<>(taskManager.values());
     }
 
@@ -34,7 +37,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getTasks() {
         if (tasks.isEmpty()) {
-            System.out.println("Список задач пуст");
+            System.out.println("Task list is empty");
         }
         return new ArrayList<>(tasks.values());
     }
@@ -76,7 +79,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Epic> getEpics() {
         if (epics.isEmpty()) {
-            System.out.println("Список Эпиков пуст");
+            System.out.println("Epic list is empty");
         }
         return new ArrayList<>(epics.values());
     }
@@ -128,7 +131,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<SubTask> getSubtasks() {
         if (subTasks.isEmpty()) {
-            System.out.println("Список Подзадач пуст");
+            System.out.println("Subtasks list is empty");
         }
         return new ArrayList<>(subTasks.values());
     }
@@ -170,10 +173,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void getEpicsSubTasks(Epic epic) {
         if (epic.getSubtasks().isEmpty()) {
-            System.out.println("У эпика нет активных подзадач");
+            System.out.println("No active subtasks for this epic");
             return;
         }
-        System.out.println("Список подзадач:");
+        System.out.println("Subtasks list:");
         System.out.println(epic.getSubtasks());
     }
 
