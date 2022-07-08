@@ -6,15 +6,16 @@ import java.util.*;
 
 public class InMemoryHistoryManager<T extends Task> implements HistoryManager {
 
-    protected List<Task> historyList;
-    protected Map<Integer, Node<T>> nodeMap;
+    private List<Task> historyList;
+    private final Map<Integer, Node<T>> nodeMap;
 
-    Node<T> first;
-    Node<T> last;
+    protected int size = 0;
+    private Node<T> tail;
+    private Node<T> head;
 
     public InMemoryHistoryManager() {
-        this.historyList = new ArrayList<>();
-        this.nodeMap = new HashMap<>();
+        historyList = new ArrayList<>();
+        nodeMap = new HashMap<>();
     }
 
     @Override
@@ -34,30 +35,29 @@ public class InMemoryHistoryManager<T extends Task> implements HistoryManager {
 
     @Override
     public void remove(int id) {
-        nodeMap.remove(id);
+        historyList.remove(nodeMap.get(id).task);
     }
 
-    public void linkLast(T task) {
-        final Node<T> l = last;
-        final Node<T> newNode = new Node<>(l, task, null);
-        last = newNode;
+    private void linkLast(T task) {
+        Node<T> oldTail = tail;
+        Node<T> newNode = new Node<>(oldTail, task, null);
 
-        if (l == null)
-            first = newNode;
-        else
-            l.next = newNode;
+        tail = newNode;
 
-        nodeMap.put(task.getId(), newNode);
+        if (oldTail == null) {
+            head = newNode;
+            nodeMap.put(task.getId(), head);
+        } else {
+            oldTail.next = newNode;
+            nodeMap.put(task.getId(), oldTail.next);
+        }
+        size++;
     }
 
-//    public List<Task> getTasks() {
-//        for (Map.Entry<Integer, Node<T>> entry : nodeMap.entrySet()) {
-//            historyList.add(entry.getValue().task);
-//        }
-//        return historyList;
-//    }
-
-    public void removeNode(Node<T> node) {
+    private void removeNode(Node<T> node) {
+        if (size > 1) {
+            node.next.prev = node.prev;
+        }
         nodeMap.remove(node.task.getId());
     }
 

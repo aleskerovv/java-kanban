@@ -17,22 +17,31 @@ public class Main {
         Epic epic = new Epic("Первый эпик", "Описание первого эпика");
         mng.createEpic(epic);
 
-/*        SubTask subTask = new SubTask("Первая сабтаска", "Проверяем функционал", TaskStatus.NEW, epic);
+        SubTask subTask = new SubTask("Первая сабтаска", "Проверяем функционал", TaskStatus.NEW, epic);
         SubTask anotherSubTask = new SubTask("Вторая сабтаска", "Снова Проверяем функционал", TaskStatus.NEW, epic);
+        SubTask thirdSubTask = new SubTask("Третья сабтаска", "Проверка третьего сабтаска", TaskStatus.IN_PROGRESS, epic);
+        mng.createSubtask(thirdSubTask);
         mng.createSubtask(subTask);
-        mng.createSubtask(anotherSubTask);*/
+        mng.createSubtask(anotherSubTask);
 
         Epic anotherEpic = new Epic("Второй эпик", "Описание второго эпика");
         mng.createEpic(anotherEpic);
 
-/*        SubTask thirdSubTask = new SubTask("Третья сабтаска", "Проверка третьего сабтаска", TaskStatus.IN_PROGRESS, anotherEpic);
-        mng.createSubtask(thirdSubTask);*/
-
+        mng.findEpicById(7);
+        System.out.println(mng.getHistory());
+        mng.findTasksById(2);
+        System.out.println(mng.getHistory());
         mng.findEpicById(3);
-        mng.findTasksById(1);
-        mng.findEpicById(3);
-        mng.findTasksById(1);
-
+        System.out.println(mng.getHistory());
+        mng.findSubTasksById(4);
+        System.out.println(mng.getHistory());
+        mng.findSubTasksById(5);
+        System.out.println(mng.getHistory());
+        mng.findSubTasksById(4);
+        System.out.println(mng.getHistory());
+        mng.findSubTasksById(6);
+        System.out.println(mng.getHistory());
+        mng.deleteEpicById(3);
         System.out.println(mng.getHistory());
     }
 }
