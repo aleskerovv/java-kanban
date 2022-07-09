@@ -27,21 +27,34 @@ public class Main {
         Epic anotherEpic = new Epic("Второй эпик", "Описание второго эпика");
         mng.createEpic(anotherEpic);
 
-        mng.findEpicById(7);
-        System.out.println(mng.getHistory());
-        mng.findTasksById(2);
-        System.out.println(mng.getHistory());
-        mng.findEpicById(3);
-        System.out.println(mng.getHistory());
-        mng.findSubTasksById(4);
+    //Тесты с Epic и SubTask
+/*        mng.findSubTasksById(4);
         System.out.println(mng.getHistory());
         mng.findSubTasksById(5);
         System.out.println(mng.getHistory());
-        mng.findSubTasksById(4);
+        mng.findSubTasksById(6);
+        System.out.println(mng.getHistory());
+        mng.findSubTasksById(5);
+        System.out.println(mng.getHistory());
+        mng.findEpicById(3);
         System.out.println(mng.getHistory());
         mng.findSubTasksById(6);
         System.out.println(mng.getHistory());
-        mng.deleteEpicById(3);
+        mng.findSubTasksById(6);
         System.out.println(mng.getHistory());
+
+        mng.deleteEpicById(3);
+        System.out.println(mng.getHistory());*/
+
+    //Тесты с Task
+/*        mng.findTasksById(1);
+        System.out.println(mng.getHistory());
+        mng.findTasksById(2);
+        System.out.println(mng.getHistory());
+        mng.findTasksById(1);
+        System.out.println(mng.getHistory());
+
+        mng.deleteTaskById(2);
+        System.out.println(mng.getHistory());*/
     }
 }

@@ -6,7 +6,7 @@ import java.util.*;
 
 public class InMemoryHistoryManager<T extends Task> implements HistoryManager {
 
-    private List<Task> historyList;
+    private final List<Task> historyList;
     private final Map<Integer, Node<T>> nodeMap;
 
     protected int size = 0;
@@ -55,9 +55,14 @@ public class InMemoryHistoryManager<T extends Task> implements HistoryManager {
     }
 
     private void removeNode(Node<T> node) {
+        if (node.next == null) {
+            node.next = node;
+        }
+
         if (size > 1) {
             node.next.prev = node.prev;
         }
+
         nodeMap.remove(node.task.getId());
     }
 
