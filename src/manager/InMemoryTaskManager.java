@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import static entity.TaskStatus.*;
-import static entity.TaskStatus.IN_PROGRESS;
 
 public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> taskManager;

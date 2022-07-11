@@ -1,6 +1,5 @@
 package entity;
 
-import manager.InMemoryTaskManager;
 import manager.Managers;
 
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ public class Epic extends Task {
         this.status = NEW;
     }
 
+    @Override
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
