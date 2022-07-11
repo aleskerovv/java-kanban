@@ -14,6 +14,7 @@ import static entity.TaskStatus.*;
 public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> taskManager;
     private final HistoryManager historyManager = Managers.getDefaultHistory();
+    int id = 0;
 
     public InMemoryTaskManager() {
         this.taskManager = new HashMap<>();
@@ -151,7 +152,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void clearSubtasksList() {
         for (SubTask subTask : subTasks.values()) {
-            if (historyManager.getHistory().contains(subTask)) historyManager.remove(subTask.getId());
+            historyManager.remove(subTask.getId());
             epics.get(subTask.getEpic()).clearSubtasks();
             setEpicStatus(subTask.getEpic());
             taskManager.remove(subTask.getId());
@@ -162,7 +163,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteSubTaskById(Integer id) {
-        if (historyManager.getHistory().contains(subTasks.get(id))) historyManager.remove(id);
+        historyManager.remove(id);
         epics.get(subTasks.get(id).getEpic()).deleteSubTaskById(id);
         setEpicStatus(subTasks.get(id).getEpic());
         subTasks.remove(id);
@@ -191,6 +192,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     //Определение статуса для эпика перенес в Manager
     private void setEpicStatus(Integer id) {
+        if (epics.get(id).getSubtasks().isEmpty()) {
+            epics.get(id).setStatus(NEW);
+            return;
+        }
+
         boolean isDone = false;
         boolean isNew = false;
         for (Integer subTask : epics.get(id).getSubtasks()) {
@@ -229,6 +235,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private Integer getNextId() {
-        return taskManager.size() + 1;
+        return ++id;
     }
 }

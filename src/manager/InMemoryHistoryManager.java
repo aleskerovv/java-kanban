@@ -20,7 +20,6 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void addTask(Task task) {
         if (nodeMap.containsKey(task.getId())) {
-            historyList.clear();
             removeNode(nodeMap.get(task.getId()));
         }
         linkLast(task);
@@ -34,11 +33,11 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         if (oldTail == null) {
             head = newNode;
-            nodeMap.put(task.getId(), head);
         } else {
             oldTail.next = newNode;
-            nodeMap.put(task.getId(), oldTail.next);
         }
+
+        nodeMap.put(task.getId(), newNode);
         size++;
     }
 
@@ -60,34 +59,29 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-        removeNode(nodeMap.get(id));
-        nodeMap.remove(id);
+        if (nodeMap.containsKey(id)) {
+            removeNode(nodeMap.get(id));
+            nodeMap.remove(id);
+        }
     }
 
     private void removeNode(Node node) {
         //Для всех, кроме первого и последнего элементов
-        if (node.prev != null && node.next != null) {
-            Node nodePrev = node.prev;
-            Node nodeNext = node.next;
-            nodeNext.prev = node.prev;
-            nodePrev.next = node.next;
-        } else {
-            // Для первого элемента
-            if (node.prev == null) {
-                Node nodeNext = node.next;
-                if (nodeNext != null) {
-                    nodeNext.prev = null;
-                    //Если лист из 1 объекта - зачищаем и хвост
-                } else {
-                    tail = null;
-                }
-                head = nodeNext;
-                // Для последнего элемента
+        Node nodeNext = node.next;
+        Node nodePrev = node.prev;
+        if (nodePrev != null && nodeNext != null) { //Для всех, кроме первого и последнего элементов
+            nodeNext.prev = nodePrev;
+            nodePrev.next = nodeNext;
+        } else if (nodePrev == null) {
+            if (nodeNext != null) {
+                nodeNext.prev = null;
             } else {
-                Node nodePrev = node.prev;
-                nodePrev.next = null;
-                tail = nodePrev;
+                tail = null; //Если лист из 1 объекта - зачищаем и хвост
             }
+            head = nodeNext;
+        } else { // Для последнего элемента
+            nodePrev.next = null;
+            tail = nodePrev;
         }
         size--;
     }

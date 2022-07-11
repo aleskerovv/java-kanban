@@ -52,6 +52,12 @@ public class Main {
         mng.clearSubtasksList();
         System.out.println(mng.getHistory());
 
+        //Проверка инкремент id
+        SubTask subTaskForTest = new SubTask("Третья сабтаска", "Проверка третьего сабтаска", DONE, 3);
+        mng.createSubtask(subTaskForTest);
+
+        System.out.println(mng.getHistory());
+
         mng.deleteEpicById(3);
         System.out.println(mng.getHistory());*/
 
