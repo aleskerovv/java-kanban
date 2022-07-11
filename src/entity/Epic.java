@@ -1,68 +1,31 @@
 package entity;
 
+import manager.InMemoryTaskManager;
+import manager.Managers;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import static entity.TaskStatus.*;
+
 public class Epic extends Task {
-    protected List<SubTask> subTasks = new ArrayList<>();
-    static final TaskStatus NEW = TaskStatus.NEW;
-    static final TaskStatus IN_PROGRESS = TaskStatus.IN_PROGRESS;
-    static final TaskStatus DONE = TaskStatus.DONE;
+    protected List<Integer> subTasks = new ArrayList<>();
+    protected List<SubTask> list = Managers.getDefault().getSubtasks();
 
     public Epic(String title, String description) {
         super(title, description);
-        setStatus();
+        this.status = NEW;
     }
 
-    public void setStatus() {
-        checkStatus();
+    public void setStatus(TaskStatus status) {
+        this.status = status;
     }
 
-    //Произвожу расчет статуса Epic при всех возможных статусах SubTask
-    public void checkStatus() {
-        if (subTasks.isEmpty()) {
-            this.status = NEW;
-            return;
-        }
-
-        boolean isDone = false;
-        boolean isNew = false;
-        for (SubTask subTask : subTasks) {
-            switch (subTask.getStatus()) {
-                case NEW:
-                    if (isDone) {
-                        this.status = IN_PROGRESS;
-                        return;
-                    }
-                    isNew = true;
-                    break;
-                case DONE:
-                    if (isNew) {
-                        this.status = IN_PROGRESS;
-                        return;
-                    }
-                    isDone = true;
-                    break;
-                case IN_PROGRESS:
-                    this.status = IN_PROGRESS;
-                    return;
-            }
-        }
-
-        if (isDone) {
-            this.status = DONE;
-        } else if (isNew) {
-            this.status = NEW;
-        } else {
-            this.status = IN_PROGRESS;
-        }
+    public void setSubtasks(Integer subTaskId) {
+        this.subTasks.add(subTaskId);
     }
 
-    public void setSubtasks(SubTask subTask) {
-        this.subTasks.add(subTask);
-    }
-
-    public List<SubTask> getSubtasks() {
+    public List<Integer> getSubtasks() {
         return subTasks;
     }
 
@@ -70,8 +33,8 @@ public class Epic extends Task {
         subTasks.clear();
     }
 
-    public void deleteSubTaskById(SubTask subTask) {
-        subTasks.remove(subTask);
+    public void deleteSubTaskById(Integer subTaskId) {
+        subTasks.remove(subTaskId);
     }
 
     @Override

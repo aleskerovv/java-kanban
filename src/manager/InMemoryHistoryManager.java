@@ -4,43 +4,31 @@ import entity.Task;
 
 import java.util.*;
 
-public class InMemoryHistoryManager<T extends Task> implements HistoryManager {
+public class InMemoryHistoryManager implements HistoryManager {
 
-    private final List<Task> historyList;
-    private final Map<Integer, Node<T>> nodeMap;
+    private List<Task> historyList;
+    private final Map<Integer, Node> nodeMap;
 
     protected int size = 0;
-    private Node<T> tail;
-    private Node<T> head;
+    private Node tail;
+    private Node head;
 
     public InMemoryHistoryManager() {
-        historyList = new ArrayList<>();
         nodeMap = new HashMap<>();
     }
 
     @Override
     public void addTask(Task task) {
         if (nodeMap.containsKey(task.getId())) {
-            historyList.remove(task);
+            historyList.clear();
             removeNode(nodeMap.get(task.getId()));
         }
-        historyList.add(task);
-        linkLast((T) task);
+        linkLast(task);
     }
 
-    @Override
-    public List<Task> getHistory() {
-        return historyList;
-    }
-
-    @Override
-    public void remove(int id) {
-        historyList.remove(nodeMap.get(id).task);
-    }
-
-    private void linkLast(T task) {
-        Node<T> oldTail = tail;
-        Node<T> newNode = new Node<>(oldTail, task, null);
+    private void linkLast(Task task) {
+        Node oldTail = tail;
+        Node newNode = new Node(oldTail, task, null);
 
         tail = newNode;
 
@@ -54,27 +42,66 @@ public class InMemoryHistoryManager<T extends Task> implements HistoryManager {
         size++;
     }
 
-    private void removeNode(Node<T> node) {
-        if (node.next == null) {
-            node.next = node;
-        }
-
-        if (size > 1) {
-            node.next.prev = node.prev;
-        }
-
-        nodeMap.remove(node.task.getId());
+    @Override
+    public List<Task> getHistory() {
+        return getTasks();
     }
 
-    private static class Node<T> {
-        T task;
-        Node<T> next;
-        Node<T> prev;
+    private List<Task> getTasks() {
+        historyList = new ArrayList<>();
+        Node node = head;
+        while (node != null) {
+            historyList.add(node.task);
+            node = node.next;
+        }
 
-        Node(Node<T> prev, T task, Node<T> next) {
+        return historyList;
+    }
+
+    @Override
+    public void remove(int id) {
+        removeNode(nodeMap.get(id));
+        nodeMap.remove(id);
+    }
+
+    private void removeNode(Node node) {
+        //Для всех, кроме первого и последнего элементов
+        if (node.prev != null && node.next != null) {
+            Node nodePrev = node.prev;
+            Node nodeNext = node.next;
+            nodeNext.prev = node.prev;
+            nodePrev.next = node.next;
+        } else {
+            // Для первого элемента
+            if (node.prev == null) {
+                Node nodeNext = node.next;
+                if (nodeNext != null) {
+                    nodeNext.prev = null;
+                    //Если лист из 1 объекта - зачищаем и хвост
+                } else {
+                    tail = null;
+                }
+                head = nodeNext;
+                // Для последнего элемента
+            } else {
+                Node nodePrev = node.prev;
+                nodePrev.next = null;
+                tail = nodePrev;
+            }
+        }
+        size--;
+    }
+
+    private static class Node {
+        Task task;
+        Node next;
+        Node prev;
+
+        Node(Node prev, Task task, Node next) {
             this.task = task;
             this.next = next;
             this.prev = prev;
         }
+
     }
 }

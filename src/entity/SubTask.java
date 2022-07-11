@@ -3,15 +3,15 @@ package entity;
 import java.util.Objects;
 
 public class SubTask extends Task {
-    protected Epic epic;
+    protected Integer epicId;
 
-    public SubTask(String title, String description, TaskStatus status, Epic epic) {
+    public SubTask(String title, String description, TaskStatus status, Integer epicId) {
         super(title, description, status);
-        this.epic = epic;
+        this.epicId = epicId;
     }
 
-    public Epic getEpic() {
-        return epic;
+    public Integer getEpic() {
+        return epicId;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class SubTask extends Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, status, id, epic);
+        return Objects.hash(title, description, status, id, epicId);
     }
 
     @Override
@@ -38,6 +38,6 @@ public class SubTask extends Task {
                 ", Description=" + description +
                 ", id=" + id +
                 ", Status=" + status +
-                ", Epic=" + epic.getTitle() + "}";
+                ", EpicId=" + epicId + "}";
     }
 }
