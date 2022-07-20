@@ -47,6 +47,10 @@ public class Task {
     public String getDescription() {
         return description;
     }
+
+    public Integer getEpic() {
+        return null;
+    }
     @Override
     public String toString() {
         return "Task{" +
