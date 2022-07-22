@@ -13,7 +13,7 @@ import static entity.TaskStatus.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> taskManager;
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    final HistoryManager historyManager = Managers.getDefaultHistory();
     int id = 0;
 
     public InMemoryTaskManager() {
