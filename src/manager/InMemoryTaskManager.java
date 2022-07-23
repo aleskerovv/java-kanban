@@ -28,7 +28,7 @@ public class InMemoryTaskManager implements TaskManager {
         return new ArrayList<>(taskManager.values());
     }
 
-    private final Map<Integer, Task> tasks = new HashMap<>();
+    final Map<Integer, Task> tasks = new HashMap<>();
 
     @Override
     public void createTask(Task task) {
@@ -72,7 +72,7 @@ public class InMemoryTaskManager implements TaskManager {
         tasks.put(task.getId(), task);
     }
 
-    private final Map<Integer, Epic> epics = new HashMap<>();
+    final Map<Integer, Epic> epics = new HashMap<>();
 
     @Override
     public void createEpic(Epic epic) {

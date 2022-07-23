@@ -37,18 +37,16 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 //        manager.createSubtask(subTask);
 //        manager.createSubtask(subTaskNew);
 //        manager.createEpic(epicNew);
-/*        manager.clearTasks();
-        manager.createTask(task);
-        manager.findEpicById(2);
-        manager.findTasksById(1);
-        manager.findSubTasksById(3);
-        manager.findSubTasksById(4);
-        System.out.println(manager.getHistory());*/
-        manager.getDataFromCsv(filePath);
-        manager.findEpicById(1);
-        manager.findEpicById(2);
-        manager.findTasksById(4);
-        manager.saveToCsv();
+        manager.createEntityFromText(filePath);
+//        manager.findTasksById(1);
+//        manager.findEpicById(2);
+//        manager.findSubTasksById(3);
+//        manager.findSubTasksById(4);
+//        manager.findEpicById(5);
+//        manager.findSubTasksById(4);
+//        manager.getHistory();
+        System.out.println(manager.getAllTaskList());
+        System.out.println(manager.getHistory());
     }
 
     @Override
@@ -123,23 +121,29 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         saveToCsv();
     }
 
+    @Override
+    public List<Task> getHistory() {
+        saveToCsv();
+        return super.getHistory();
+    }
+
     public void saveToCsv() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, false))) {
             bw.write(HEADER_FILE);
+
             for (Task t : getAllTaskList()) {
                 bw.newLine();
                 bw.write(taskToString(t, ","));
             }
 
             bw.newLine();
-            bw.newLine();
-            bw.write(historyToString(historyManager));
+            bw.write(String.format("%n%s", historyToString(historyManager)));
 
         } catch (IOException e) {
             try {
                 throw new ManagerSaveException("Process 'Save to CSV' failure");
             } catch (ManagerSaveException ex) {
-                throw new RuntimeException(ex);
+                System.out.println(ex.getMessage());;
             }
         }
     }
@@ -148,31 +152,46 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             return br.lines().skip(1).collect(Collectors.toList());
         } catch (IOException e) {
-            throw new ManagerSaveException("Process 'save to csv' failed");
+            throw new ManagerSaveException("Process 'Read from CSV' failure");
         }
     }
 
-    public void getDataFromCsv(String filePath) throws ManagerSaveException {
-        for (String row : readCsvFile(filePath)) {
-            if (!row.equals("")) {
-                Task t = stringToTask(row);
+    public void createEntityFromText(String filePath) throws ManagerSaveException {
+        boolean isTask = true;
 
-                String classType = String.valueOf(t.getClass());
-                switch (classType) {
-                    case "class entity.Task":
-                        createTask(t);
-                        break;
-                    case "class entity.Epic":
-                        createEpic((Epic) t);
-                        break;
-                    case "class entity.SubTask":
-                        createSubtask((SubTask) t);
-                        break;
-                    default:
-                        System.out.println("Failed while read csv file");
+        for (String row : readCsvFile(filePath)) {
+            if (isTask) {
+                if (!row.equals("")) {
+                    Task t = stringToTask(row);
+
+                    String classType = String.valueOf(t.getClass());
+                    switch (classType) {
+                        case "class entity.Task":
+                            createTask(t);
+                            break;
+                        case "class entity.Epic":
+                            createEpic((Epic) t);
+                            break;
+                        case "class entity.SubTask":
+                            createSubtask((SubTask) t);
+                            break;
+                        default:
+                            System.out.println("Failed while read csv file");
+                    }
+                } else {
+                    row.lines().skip(1);
+                    isTask = false;
                 }
             } else {
-                break;
+                for (Integer id : stringToHistory(row)) {
+                    if (tasks.containsKey(id)) {
+                        findTasksById(id);
+                    } else if (epics.containsKey(id)) {
+                        findEpicById(id);
+                    } else {
+                        findSubTasksById(id);
+                    }
+                }
             }
         }
     }
@@ -228,7 +247,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         for (Task t : historyManager.getHistory()) {
             watchedTask.add(String.format("%d", t.getId()));
         }
-        return watchedTask.toString().replace("[", "").replace("]", "");
+        return watchedTask.toString().replace("[", "").replace("]", "").replace(" ", "");
     }
 
     static List<Integer> stringToHistory(String value) {
