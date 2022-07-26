@@ -14,10 +14,14 @@ import static entity.TaskStatus.*;
 public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> taskManager;
     final HistoryManager historyManager = Managers.getDefaultHistory();
-    int id = 0;
+    private int id = 0;
 
     public InMemoryTaskManager() {
         this.taskManager = new HashMap<>();
+    }
+
+    void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -241,7 +245,7 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    private Integer getNextId() {
+    Integer getNextId() {
         return ++id;
     }
 }

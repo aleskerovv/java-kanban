@@ -5,19 +5,25 @@ public class Task {
     protected String description;
     protected Integer id;
     protected TaskStatus status;
+    protected TaskType type;
 
-    public Task(String title, String description, TaskStatus status) {
-        this(title, description);
+    public Task() {
+
+    }
+
+    public Task(String title, String description, TaskType type, TaskStatus status) {
+        this(title, description, type);
         this.status = status;
     }
 
-    public Task(String title, String description) {
+    public Task(String title, String description, TaskType type) {
         this.title = title;
         this.description = description;
+        this.type = type;
     }
 
-    public Task(String title, String description, TaskStatus status, Integer id) {
-        this(title, description);
+    public Task(String title, String description, TaskType type,TaskStatus status, Integer id) {
+        this(title, description, type);
         this.status = status;
         this.id = id;
     }
@@ -52,6 +58,10 @@ public class Task {
 
     public String getDescription() {
         return description;
+    }
+
+    public TaskType getType() {
+        return type;
     }
 
     public Integer getEpic() {

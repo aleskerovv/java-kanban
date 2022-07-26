@@ -1,9 +1,6 @@
 package manager;
 
-import entity.Epic;
-import entity.SubTask;
-import entity.Task;
-import entity.TaskStatus;
+import entity.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -11,13 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static entity.TaskStatus.DONE;
-import static entity.TaskStatus.NEW;
+import static entity.TaskStatus.*;
 import static entity.TaskType.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-    Task task;
-    File filePath;
+    private final File filePath;
     private static final String HEADER_FILE = "id,type,name,status,description,epic";
 
     public FileBackedTasksManager(File filePath) {
@@ -29,28 +24,29 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         //Создаем FileBackedTaskManager, создаем и записываем в него Задачи
 /*        final File filePath = new File("tasks.csv");
         FileBackedTasksManager manager = new FileBackedTasksManager(filePath);
-        Task task = new Task("Task", "test", NEW);
-        Epic epic = new Epic("Epic1", "testEpic");
-        SubTask subTask = new SubTask("SubTask1", "testSubTask", NEW, 2);
-        SubTask subTaskNew = new SubTask("SubTask2", "testSubTask2", DONE, 2);
-        Epic epicNew = new Epic("Epic2", "testEpic2");
+        Task task = new Task("Task", "test", TASK, NEW);
+        Epic epic = new Epic("Epic", "test", EPIC);
+        SubTask subTask = new SubTask("SubTask", "test", SUBTASK, NEW, 2);
+        SubTask anotherSubTask = new SubTask("SubTask", "test", SUBTASK, DONE, 2);
+        Epic anotherEpic = new Epic("AnotherEpic", "test", EPIC);
         manager.createTask(task);
         manager.createEpic(epic);
         manager.createSubtask(subTask);
-        manager.createSubtask(subTaskNew);
-        manager.createEpic(epicNew);*/
+        manager.createSubtask(anotherSubTask);
+        manager.createEpic(anotherEpic);*/
         //Считываем список задач из файла, просматриваем их. В файле отобразится история просмотров
 /*        manager.createEntityFromText();
+        Task another = new Task("another", "test", TASK, DONE);
+        manager.createTask(another);
         manager.findTasksById(1);
         manager.findEpicById(2);
         manager.findSubTasksById(3);
         manager.findSubTasksById(4);
         manager.findEpicById(5);
         manager.findTasksById(1);
-        manager.getHistory();
         System.out.println(manager.getAllTaskList());
-        System.out.println(manager.getHistory());*/ //Если просто считать файл и запустить методы с 50 и 51 строки
-        //Можно будет увидеть, что все восстановилось актуально
+        System.out.println(manager.getHistory());*/ //Если просто считать файл и запустить методы с 47 и 48 строки
+                                                    //Можно будет увидеть, что все восстановилось актуально
 
         //Проверяем, что сохраняется уникальность просмотра истории в файле
 /*        manager.findTasksById(1);
@@ -63,28 +59,24 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     //Метод сохранения файла в *.csv
-    public void saveToCsv() throws ManagerSaveException {
+    public void saveToCsv() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, StandardCharsets.UTF_8, false))) {
             bw.write(HEADER_FILE);
 
             for (Task t : getAllTaskList()) {
                 bw.newLine();
-                bw.write(taskToString(t, ","));
+                bw.write(taskToString(t));
             }
 
             bw.newLine();
             bw.write(String.format("%n%s", historyToString(historyManager)));
         } catch (IOException e) {
-            try {
-                throw new ManagerSaveException("Process 'Save to CSV' failure");
-            } catch (ManagerSaveException ex) {
-                System.out.println(ex.getMessage());
-            }
+            throw new ManagerSaveException("Process 'Save to CSV' failure");
         }
     }
 
     //Метод считывания файла
-    public List<String> readCsvFile(File filePath) throws ManagerSaveException {
+    public List<String> readCsvFile(File filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath, StandardCharsets.UTF_8))) {
             return br.lines()
                     .skip(1)
@@ -101,91 +93,106 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         for (String row : readCsvFile(filePath)) {
             if (isTask) {
                 if (!row.equals("")) {
-                    Task t = stringToTask(row);
-
-                    String classType = String.valueOf(t.getClass());
-                    switch (classType) {
-                        case "class entity.Task":
-                            createTask(t);
-                            break;
-                        case "class entity.Epic":
-                            createEpic((Epic) t);
-                            break;
-                        case "class entity.SubTask":
-                            createSubtask((SubTask) t);
-                            break;
-                        default:
-                            System.out.println("Failed while read csv file");
-                    }
+                    parseTask(row);
                 } else {
-                    row.lines().skip(1);
                     isTask = false;
                 }
             } else {
-                for (Integer id : stringToHistory(row)) {
-                    if (tasks.containsKey(id)) {
-                        findTasksById(id);
-                    } else if (epics.containsKey(id)) {
-                        findEpicById(id);
-                    } else if (subTasks.containsKey(id)) {
-                        findSubTasksById(id);
-                    } else {
-                        break;
-                    }
-                }
+                parseHistory(row);
+            }
+        }
+
+        setMaxId();
+    }
+
+    public void setMaxId() {
+        int maxId = 0;
+        for (Task task : getAllTaskList()) {
+            if (maxId < task.getId())
+                maxId = task.getId();
+        }
+        setId(maxId);
+    }
+
+    private void parseTask(String row) {
+        Task t = stringToTask(row);
+        TaskType type = t.getType();
+
+        switch (type) {
+            case TASK:
+                createTask(t);
+                break;
+            case EPIC:
+                createEpic((Epic) t);
+                break;
+            case SUBTASK:
+                createSubtask((SubTask) t);
+                break;
+        }
+    }
+
+    private void parseHistory(String row) {
+        for (Integer id : stringToHistory(row)) {
+            if (tasks.containsKey(id)) {
+                findTasksById(id);
+            } else if (epics.containsKey(id)) {
+                findEpicById(id);
+            } else if (subTasks.containsKey(id)) {
+                findSubTasksById(id);
+            } else {
+                break;
             }
         }
     }
 
-    String taskToString(Task task, String delimiter) {
-        String classType = String.valueOf(task.getClass());
+    String taskToString(Task task) {
+        String stringTask = String.join(",", String.valueOf(task.getId()), String.valueOf(task.getType())
+                , task.getTitle()
+                , String.valueOf(task.getStatus())
+                , task.getDescription());
 
-        String stringTask = "";
-        switch (classType) {
-            case "class entity.Epic":
-                stringTask = String.format("%d%s%s%s%s%s%s%s%s", task.getId(), delimiter
-                        , EPIC, delimiter, task.getTitle(), delimiter, task.getStatus()
-                        , delimiter, task.getDescription());
-                break;
-            case "class entity.Task":
-                stringTask = String.format("%d%s%s%s%s%s%s%s%s", task.getId(), delimiter
-                        , TASK, delimiter, task.getTitle(), delimiter, task.getStatus()
-                        , delimiter, task.getDescription());
-                break;
-            case "class entity.SubTask":
-                stringTask = String.format("%d%s%s%s%s%s%s%s%s%s%s", task.getId(), delimiter
-                        , SUBTASK, delimiter, task.getTitle(), delimiter, task.getStatus()
-                        , delimiter, task.getDescription(), delimiter, task.getEpic());
-                break;
+        if(SUBTASK.equals(task.getType())) {
+            stringTask = String.join(",", stringTask, String.valueOf(task.getEpic()));
         }
-
         return stringTask;
     }
 
     Task stringToTask(String row) {
+        Task task = new Task();
         String[] array = row.split(",");
 
-        switch (array[1]) {
-            case "TASK":
-                task = new Task(array[2], array[4]
-                        , TaskStatus.valueOf(array[3])
-                        , Integer.valueOf(array[0]));
+        String title = array[2];
+        String description = array[4];
+        TaskStatus status = TaskStatus.valueOf(array[3]);
+        Integer id = Integer.valueOf(array[0]);
+        TaskType taskType = TaskType.valueOf(array[1]);
+
+        switch (taskType) {
+            case TASK:
+                task = new Task(title, description
+                        , taskType
+                        , status
+                        , id);
                 break;
-            case "EPIC":
-                task = new Epic(array[2]
-                        , array[4]
-                        , Integer.valueOf(array[0]));
+            case EPIC:
+                task = new Epic(title
+                        , description
+                        , taskType
+                        , id);
                 break;
-            case "SUBTASK":
-                task = new SubTask(array[2], array[4], TaskStatus.valueOf(array[3])
-                        , Integer.valueOf(array[5])
-                        , Integer.valueOf(array[0]));
+            case SUBTASK:
+                Integer epicId  = Integer.valueOf(array[5]);
+                task = new SubTask(title, description
+                        , taskType
+                        , status
+                        , epicId
+                        , id);
                 break;
             default:
                 break;
         }
 
-        return this.task;
+        return task;
     }
 
     static String historyToString(HistoryManager historyManager) {
@@ -195,10 +202,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             watchedTask.add(String.format("%d", t.getId()));
         }
 
-        return watchedTask.toString()
-                .replace("[", "")
-                .replace("]", "")
-                .replace(" ", "");
+        return String.join(",", watchedTask);
     }
 
     static List<Integer> stringToHistory(String value) {
@@ -214,161 +218,93 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public void createTask(Task task) {
         super.createTask(task);
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+        saveToCsv();
     }
 
     @Override
     public void clearTasks() {
         super.clearTasks();
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+        saveToCsv();
     }
 
     @Override
     public void deleteTaskById(Integer id) {
         super.deleteTaskById(id);
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+        saveToCsv();
     }
 
     @Override
     public void updateTask(Task task) {
         super.updateTask(task);
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+        saveToCsv();
     }
 
     @Override
     public void createEpic(Epic epic) {
         super.createEpic(epic);
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+        saveToCsv();
     }
 
     @Override
     public void clearEpicsList() {
         super.clearEpicsList();
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+        saveToCsv();
     }
 
     @Override
     public void deleteEpicById(Integer id) {
         super.deleteEpicById(id);
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+        saveToCsv();
     }
 
     @Override
     public void updateEpic(Epic epic) {
         super.updateEpic(epic);
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+        saveToCsv();
     }
 
     @Override
     public void createSubtask(SubTask subTask) {
         super.createSubtask(subTask);
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+        saveToCsv();
     }
 
     @Override
     public void clearSubtasksList() {
         super.clearSubtasksList();
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+        saveToCsv();
     }
 
     @Override
     public void deleteSubTaskById(Integer id) {
         super.deleteSubTaskById(id);
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+        saveToCsv();
     }
 
     @Override
     public void updateSubTask(SubTask subTask) {
         super.updateSubTask(subTask);
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+        saveToCsv();
     }
 
     @Override
     public Task findTasksById(Integer id) {
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
-        return super.findTasksById(id);
+        Task task = super.findTasksById(id);
+        saveToCsv();
+        return task;
     }
 
     @Override
     public Epic findEpicById(Integer id) {
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
-        return super.findEpicById(id);
+        Epic epic = super.findEpicById(id);
+        saveToCsv();
+        return epic;
     }
 
     @Override
     public SubTask findSubTasksById(Integer id) {
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
-        return super.findSubTasksById(id);
+        SubTask subTask = super.findSubTasksById(id);
+        saveToCsv();
+        return subTask;
     }
-
-    @Override
-    public List<Task> getHistory() {
-        try {
-            saveToCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
-        return super.getHistory();
-    }
-
 }

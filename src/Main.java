@@ -1,33 +1,35 @@
 import entity.Epic;
 import entity.SubTask;
 import entity.Task;
+import entity.TaskType;
 import manager.Managers;
 import manager.TaskManager;
 
 import static entity.TaskStatus.*;
+import static entity.TaskType.*;
 
 public class Main {
     public static void main(String[] args) {
         TaskManager mng = Managers.getDefault();
-        Task task = new Task("Проверка тасок", "Проверка функционала по таскам", NEW);
+        Task task = new Task("Проверка тасок", "Проверка функционала по таскам", TASK, NEW);
         mng.createTask(task);
 
-        Task anotherTask = new Task("Вторая таска", "Проверка второй таски", IN_PROGRESS);
+        Task anotherTask = new Task("Вторая таска", "Проверка второй таски", TASK, IN_PROGRESS);
         mng.createTask(anotherTask);
 
-        Epic epic = new Epic("Первый эпик", "Описание первого эпика");
+        Epic epic = new Epic("Первый эпик", "Описание первого эпика", EPIC);
         mng.createEpic(epic);
 
-        SubTask subTask = new SubTask("Первая сабтаска", "Проверяем функционал", NEW, 3);
+        SubTask subTask = new SubTask("Первая сабтаска", "Проверяем функционал", SUBTASK, NEW, 3);
         mng.createSubtask(subTask);
 
-        SubTask anotherSubTask = new SubTask("Вторая сабтаска", "Снова Проверяем функционал", DONE, 3);
+        SubTask anotherSubTask = new SubTask("Вторая сабтаска", "Снова Проверяем функционал", SUBTASK, DONE, 3);
         mng.createSubtask(anotherSubTask);
 
-        SubTask thirdSubTask = new SubTask("Третья сабтаска", "Проверка третьего сабтаска", DONE, 3);
+        SubTask thirdSubTask = new SubTask("Третья сабтаска", "Проверка третьего сабтаска", SUBTASK, DONE, 3);
         mng.createSubtask(thirdSubTask);
 
-        Epic anotherEpic = new Epic("Второй эпик", "Описание второго эпика");
+        Epic anotherEpic = new Epic("Второй эпик", "Описание второго эпика", EPIC);
         mng.createEpic(anotherEpic);
 
         //Тесты с Epic и SubTask

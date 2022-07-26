@@ -8,13 +8,13 @@ import static entity.TaskStatus.*;
 public class Epic extends Task {
     protected List<Integer> subTasks = new ArrayList<>();
 
-    public Epic(String title, String description) {
-        super(title, description);
+    public Epic(String title, String description, TaskType type) {
+        super(title, description, type);
         this.status = NEW;
     }
 
-    public Epic(String title, String description, Integer id) {
-        super(title, description);
+    public Epic(String title, String description, TaskType type, Integer id) {
+        super(title, description, type);
         this.status = NEW;
         this.id = id;
     }
