@@ -1,19 +1,46 @@
 package entity;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
+
+import static entity.TaskType.SUBTASK;
 
 public class SubTask extends Task {
     protected Integer epicId;
 
-    public SubTask(String title, String description, TaskType type, TaskStatus status, Integer epicId) {
-        super(title, description, type, status);
+    public SubTask(String title, String description, TaskStatus status, long duration, String startTime, Integer epicId) {
+        super(title, description);
+        this.status = status;
         this.epicId = epicId;
+        this.duration = duration;
+        this.startTime = LocalDateTime.parse(startTime);
+        this.type = SUBTASK;
     }
 
-    public SubTask(String title, String description, TaskType type, TaskStatus status, Integer epicId, Integer id) {
-        super(title, description, type, status);
+    public SubTask(String title, String description, TaskStatus status, long duration, String startTime, Integer epicId, Integer id) {
+        super(title, description);
+        this.status = status;
         this.epicId = epicId;
         this.id = id;
+        this.type = SUBTASK;
+        this.duration = duration;
+        this.startTime = LocalDateTime.parse(startTime);
+    }
+
+    public SubTask(String title, String description, TaskStatus status, long duration, Integer epicId, Integer id) {
+        super(title, description);
+        this.status = status;
+        this.epicId = epicId;
+        this.id = id;
+        this.type = SUBTASK;
+        this.duration = duration;
+    }
+    public SubTask(String title, String description, TaskStatus status, long duration, Integer epicId) {
+        super(title, description);
+        this.status = status;
+        this.epicId = epicId;
+        this.type = SUBTASK;
+        this.duration = duration;
     }
 
     @Override
@@ -26,25 +53,31 @@ public class SubTask extends Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SubTask subTask = (SubTask) o;
-        return Objects.equals(getTitle(), subTask.getTitle())
-                && Objects.equals(getDescription(), subTask.getDescription())
-                && Objects.equals(getStatus(), subTask.getStatus())
-                && Objects.equals(getId(), subTask.getId())
-                && Objects.equals(getEpic(), subTask.getEpic());
+        return Objects.equals(title, subTask.title)
+                && Objects.equals(description, subTask.description)
+                && Objects.equals(id, subTask.id)
+                && status == subTask.status
+                && type == subTask.type
+                && Objects.equals(epicId, subTask.epicId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, status, id, epicId);
+        return Objects.hash(title, description, id, status, type, epicId);
     }
 
     @Override
     public String toString() {
         return "SubTask{" +
-                "Title=" + title +
-                ", Description=" + description +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
                 ", id=" + id +
-                ", Status=" + status +
-                ", EpicId=" + epicId + "}";
+                ", status=" + status +
+                ", type=" + type +
+                ", duration=" + duration +
+                ", startTime=" + startTime + " мин." +
+                ", endTime=" + getEndTime() +
+                ", epicId=" + epicId +
+                '}';
     }
 }

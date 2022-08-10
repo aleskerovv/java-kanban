@@ -17,8 +17,7 @@ public class Managers {
         return new InMemoryHistoryManager();
     }
 
-    static FileBackedTasksManager loadFromFile(File file) throws FileNotFoundException {
-        FileReader reader = new FileReader(file);
+    public static FileBackedTasksManager loadFromFile(File file) throws FileNotFoundException {
         return new FileBackedTasksManager(file);
     }
 }

@@ -1,20 +1,25 @@
 package entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static entity.TaskStatus.*;
+import static entity.TaskType.EPIC;
 
 public class Epic extends Task {
     protected List<Integer> subTasks = new ArrayList<>();
 
-    public Epic(String title, String description, TaskType type) {
-        super(title, description, type);
+    public Epic(String title, String description) {
+        super(title, description);
+        this.type = EPIC;
         this.status = NEW;
     }
 
-    public Epic(String title, String description, TaskType type, Integer id) {
-        super(title, description, type);
+    public Epic(String title, String description, Integer id) {
+        super(title, description);
+        this.type = EPIC;
         this.status = NEW;
         this.id = id;
     }
@@ -36,17 +41,52 @@ public class Epic extends Task {
     }
 
     @Override
+    public void setDuration(long duration) {
+        super.duration += duration;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    @Override
     public String toString() {
         String result = "Epic{" +
-                "Title=" + title +
-                ", Description=" + description +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
                 ", id=" + id +
-                ", Status=" + getStatus();
-        if (subTasks.isEmpty()) {
-            result = result + ", Subtasks=Нет активных подзадач}";
-        } else {
-            result = result + ", Subtasks=" + subTasks + "}";
-        }
+                ", status=" + status +
+                ", type=" + type +
+                ", duration=" + duration + " мин." +
+                ", startTime=" + startTime +
+                ", endTime=" + getEndTime();
+        if (subTasks.isEmpty())
+            result = result + ", subtasks=Нет активных подзадач" + '}';
+        else
+            result = result + ", subtasks=" + subTasks + '}';
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Epic epic = (Epic) o;
+        return Objects.equals(title, epic.title)
+                && Objects.equals(description, epic.description)
+                && Objects.equals(id, epic.id)
+                && status == epic.status
+                && type == epic.type
+                && Objects.equals(subTasks, epic.subTasks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, id, status, type, subTasks);
     }
 }

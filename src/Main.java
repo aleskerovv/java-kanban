@@ -5,32 +5,49 @@ import entity.TaskType;
 import manager.Managers;
 import manager.TaskManager;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.stream.Stream;
+
 import static entity.TaskStatus.*;
 import static entity.TaskType.*;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager mng = Managers.getDefault();
-        Task task = new Task("Проверка тасок", "Проверка функционала по таскам", TASK, NEW);
-        mng.createTask(task);
+//        TaskManager manager = Managers.getDefault();
+//        Task task = new Task("task", "desc", NEW, 100, "2022-08-09T15:45:30");
+//
+//        Epic epic = new Epic("epic", "test");
+//        manager.createEpic(epic);
+//        SubTask subTask = new SubTask("st", "st", IN_PROGRESS, 50, "2022-08-10T15:00:00", 1);
+//        manager.createSubtask(subTask);
+//        SubTask subTask2 = new SubTask("st", "st", NEW, 240, "2022-08-10T13:00:00", 1);
+//        manager.createSubtask(subTask2);
+//
+//        Stream.of(task, epic, subTask2, subTask).forEach(System.out::println);
 
-        Task anotherTask = new Task("Вторая таска", "Проверка второй таски", TASK, IN_PROGRESS);
-        mng.createTask(anotherTask);
 
-        Epic epic = new Epic("Первый эпик", "Описание первого эпика", EPIC);
-        mng.createEpic(epic);
-
-        SubTask subTask = new SubTask("Первая сабтаска", "Проверяем функционал", SUBTASK, NEW, 3);
-        mng.createSubtask(subTask);
-
-        SubTask anotherSubTask = new SubTask("Вторая сабтаска", "Снова Проверяем функционал", SUBTASK, DONE, 3);
-        mng.createSubtask(anotherSubTask);
-
-        SubTask thirdSubTask = new SubTask("Третья сабтаска", "Проверка третьего сабтаска", SUBTASK, DONE, 3);
-        mng.createSubtask(thirdSubTask);
-
-        Epic anotherEpic = new Epic("Второй эпик", "Описание второго эпика", EPIC);
-        mng.createEpic(anotherEpic);
+//        TaskManager mng = Managers.getDefault();
+//        Task task = new Task("Проверка тасок", "Проверка функционала по таскам", NEW);
+//        mng.createTask(task);
+//
+//        Task anotherTask = new Task("Вторая таска", "Проверка второй таски", IN_PROGRESS);
+//        mng.createTask(anotherTask);
+//
+//        Epic epic = new Epic("Первый эпик", "Описание первого эпика");
+//        mng.createEpic(epic);
+//
+//        SubTask subTask = new SubTask("Первая сабтаска", "Проверяем функционал", NEW, 3);
+//        mng.createSubtask(subTask);
+//
+//        SubTask anotherSubTask = new SubTask("Вторая сабтаска", "Снова Проверяем функционал", DONE, 3);
+//        mng.createSubtask(anotherSubTask);
+//
+//        SubTask thirdSubTask = new SubTask("Третья сабтаска", "Проверка третьего сабтаска", DONE, 3);
+//        mng.createSubtask(thirdSubTask);
+//
+//        Epic anotherEpic = new Epic("Второй эпик", "Описание второго эпика");
+//        mng.createEpic(anotherEpic);
 
         //Тесты с Epic и SubTask
 /*        mng.findSubTasksById(4);
@@ -63,7 +80,7 @@ public class Main {
         mng.deleteEpicById(3);
         System.out.println(mng.getHistory());*/
 
-    //Тесты с Task
+        //Тесты с Task
 /*        mng.findTasksById(1);
         System.out.println(mng.getHistory());
         mng.findTasksById(2);
@@ -73,5 +90,6 @@ public class Main {
 
         mng.deleteTaskById(2);
         System.out.println(mng.getHistory());*/
+
     }
 }
