@@ -431,6 +431,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
         TaskValidationException exception = assertThrows(TaskValidationException.class, () -> manager.updateTask(task1));
 
         assertEquals("Failed validation of task Первая таска" +
-                "\n due to time crossing with another task Втоаря таска: startTime=2022-08-09T12:50", exception.getMessage());
+                "\n due to time crossing with another task Втоаря таска", exception.getMessage());
     }
 }

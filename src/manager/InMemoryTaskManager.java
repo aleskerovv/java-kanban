@@ -49,13 +49,43 @@ public class InMemoryTaskManager implements TaskManager {
         if (!sortedTask.isEmpty()) {
             for (Task t : sortedTask) {
                 if(!t.equals(task)) {
-                    if (t.getStartTime().equals(task.getStartTime()))
+                    if (isIntersectPeriod(t, task))
                         throw new TaskValidationException(String.format("Failed validation of task %s\n " +
-                                        "due to time crossing with another task %s: startTime=%s"
-                                , task.getTitle(), t.getTitle(), t.getStartTime()));
+                                        "due to time crossing with another task %s"
+                                , task.getTitle(), t.getTitle()));
                 }
             }
         }
+    }
+
+    public boolean isIntersectPeriod(Task task, Task anotherTask) {
+        LocalDateTime firstStart = task.getStartTime();
+        LocalDateTime firstEnd = task.getEndTime();
+        
+        LocalDateTime secondStart = anotherTask.getStartTime();
+        LocalDateTime secondEnd = anotherTask.getEndTime();
+        
+        if(firstStart.equals(secondStart) ||
+                firstEnd.equals(secondEnd))
+            return true;
+
+        if(firstStart.isBefore(secondStart)) {
+            if(firstEnd.isBefore(secondEnd))
+                return true;
+
+            if(firstEnd.isAfter(secondEnd))
+                return true;
+        }
+        else {
+            if(secondEnd.isAfter(firstStart) &&
+                    secondEnd.isBefore(firstEnd))
+                return true;
+
+            if(secondEnd.isAfter(firstEnd))
+                return true;
+        }
+
+        return false;
     }
 
     @Override
