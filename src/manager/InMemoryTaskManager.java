@@ -48,7 +48,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void taskValidator(Task task) {
         if (!sortedTask.isEmpty()) {
             for (Task t : sortedTask) {
-                if(!t.equals(task)) {
+                if(t.getId() != task.getId()) {
                     if (isIntersectPeriod(t, task))
                         throw new TaskValidationException(String.format("Failed validation of task %s\n " +
                                         "due to time crossing with another task %s"
