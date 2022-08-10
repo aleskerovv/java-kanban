@@ -23,13 +23,13 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @BeforeEach
     void create() {
-        task1 = new Task("Первая таска", "описание", NEW, 50, "2022-08-11T15:00:00");
+        task1 = new Task("Первая таска", "описание", NEW, 50, "2022-08-23T15:00:00");
         task2 = new Task("Втоаря таска", "описание", DONE, 30, "2022-08-09T12:50:00");
         epic1 = new Epic("Эпик", "описание");
-        subTask1 = new SubTask("Первая сабтаска", "описание", NEW, 40, "2022-08-10T13:50:00", 3);
-        subTask2 = new SubTask("Вторая сабтаска", "описание", NEW, 40, "2022-08-10T14:30:00", 3);
+        subTask1 = new SubTask("Первая сабтаска", "описание", NEW, 40, "2022-08-05T13:50:00", 3);
+        subTask2 = new SubTask("Вторая сабтаска", "описание", NEW, 40, "2022-08-06T14:30:00", 3);
         epic2 = new Epic("Второй эпик", "описание");
-        subTask3 = new SubTask("Третья сабтаска", "описание", NEW, 60, "2022-08-10T15:30:00", 6);
+        subTask3 = new SubTask("Третья сабтаска", "описание", NEW, 60, "2022-08-29T15:30:00", 6);
     }
 
     @AfterEach
@@ -405,10 +405,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
 
         assertNotNull(returnedEpic.getEndTime(), "endTime is null");
-        assertEquals(LocalDateTime.parse("2022-08-10T15:10:00"), returnedEpic.getEndTime(), "EndTime not match");
+        assertEquals(LocalDateTime.parse("2022-08-06T15:10"), returnedEpic.getEndTime(), "EndTime not match");
 
         assertNotNull(returnedTask.getEndTime(), "endTime is null");
-        assertEquals(LocalDateTime.parse("2022-08-11T15:50:00"), returnedTask.getEndTime());
+        assertEquals(LocalDateTime.parse("2022-08-23T15:50"), returnedTask.getEndTime());
     }
 
     @Test
@@ -429,8 +429,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         task1.setStartTime("2022-08-09T12:50:00");
 
         TaskValidationException exception = assertThrows(TaskValidationException.class, () -> manager.updateTask(task1));
+        String message = String.format("Failed validation of task %s" +
+                "\n due to time crossing with another task %s", task1.getTitle(), task2.getTitle());
 
-        assertEquals("Failed validation of task Первая таска" +
-                "\n due to time crossing with another task Втоаря таска", exception.getMessage());
+        assertEquals(message, exception.getMessage());
+        manager.clearTasks();
     }
 }

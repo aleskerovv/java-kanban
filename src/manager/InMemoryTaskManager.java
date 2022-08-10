@@ -70,7 +70,7 @@ public class InMemoryTaskManager implements TaskManager {
             return true;
 
         if(firstStart.isBefore(secondStart)) {
-            if(firstEnd.isBefore(secondEnd))
+            if(firstEnd.isAfter(secondStart) && firstEnd.isBefore(secondEnd))
                 return true;
 
             if(firstEnd.isAfter(secondEnd))
