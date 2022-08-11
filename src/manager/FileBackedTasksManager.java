@@ -36,6 +36,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         manager.createEpic(epic1);
         manager.createSubtask(subTask1);
         manager.createSubtask(subTask2);
+//        task1.setStatus(DONE);
+//        manager.updateTask(task1);
+//
+//        System.out.println(manager.getPrioritizedTasks());
 //        //Удаляем сабтаски у Эпика и проверяем, что сбросилось duration, startTime, endTime
 //        manager.deleteSubTaskById(subTask.getId());
 //        manager.deleteSubTaskById(subTask2.getId());

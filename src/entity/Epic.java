@@ -9,6 +9,8 @@ import static entity.TaskStatus.*;
 import static entity.TaskType.EPIC;
 
 public class Epic extends Task {
+    LocalDateTime endTime;
+
     protected List<Integer> subTasks = new ArrayList<>();
 
     public Epic(String title, String description) {
@@ -19,12 +21,10 @@ public class Epic extends Task {
 
     public Epic(String title, String description, Integer id) {
         super(title, description);
-        this.type = EPIC;
-        this.status = NEW;
         this.id = id;
     }
 
-    public void setSubtasks(Integer subTaskId) {
+    public void addSubtasksId(Integer subTaskId) {
         this.subTasks.add(subTaskId);
     }
 
@@ -38,11 +38,6 @@ public class Epic extends Task {
 
     public void deleteSubTaskById(Integer subTaskId) {
         subTasks.remove(subTaskId);
-    }
-
-    @Override
-    public void setDuration(long duration) {
-        super.duration += duration;
     }
 
     public void setEndTime(LocalDateTime endTime) {

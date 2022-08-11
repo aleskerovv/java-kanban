@@ -14,8 +14,7 @@ public class Task {
     protected TaskType type;
     protected long duration;
     protected LocalDateTime startTime;
-    protected LocalDateTime endTime;
-//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+//    protected LocalDateTime endTime;
 
     public Task() {
 
@@ -115,8 +114,7 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
-        endTime = getStartTime().plusMinutes(duration);
-        return endTime;
+        return getStartTime().plusMinutes(duration);
     }
 
     public LocalDateTime getStartTime() {

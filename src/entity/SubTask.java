@@ -8,39 +8,24 @@ import static entity.TaskType.SUBTASK;
 public class SubTask extends Task {
     protected Integer epicId;
 
-    public SubTask(String title, String description, TaskStatus status, long duration, String startTime, Integer epicId) {
-        super(title, description);
-        this.status = status;
-        this.epicId = epicId;
-        this.duration = duration;
-        this.startTime = LocalDateTime.parse(startTime);
-        this.type = SUBTASK;
-    }
-
-    public SubTask(String title, String description, TaskStatus status, long duration, String startTime, Integer epicId, Integer id) {
-        super(title, description);
-        this.status = status;
-        this.epicId = epicId;
-        this.id = id;
-        this.type = SUBTASK;
-        this.duration = duration;
-        this.startTime = LocalDateTime.parse(startTime);
-    }
-
-    public SubTask(String title, String description, TaskStatus status, long duration, Integer epicId, Integer id) {
-        super(title, description);
-        this.status = status;
-        this.epicId = epicId;
-        this.id = id;
-        this.type = SUBTASK;
-        this.duration = duration;
-    }
     public SubTask(String title, String description, TaskStatus status, long duration, Integer epicId) {
         super(title, description);
         this.status = status;
         this.epicId = epicId;
         this.type = SUBTASK;
         this.duration = duration;
+    }
+    public SubTask(String title, String description, TaskStatus status, long duration, String startTime, Integer epicId) {
+        this(title, description, status, duration, epicId);
+        this.startTime = LocalDateTime.parse(startTime);
+    }
+    public SubTask(String title, String description, TaskStatus status, long duration, Integer epicId, Integer id) {
+        this(title, description, status, duration, epicId);
+        this.id = id;
+    }
+    public SubTask(String title, String description, TaskStatus status, long duration, String startTime, Integer epicId, Integer id) {
+        this(title, description, status, duration, startTime, epicId);
+        this.id = id;
     }
 
     @Override

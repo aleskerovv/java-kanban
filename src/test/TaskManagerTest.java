@@ -30,8 +30,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
         subTask2 = new SubTask("Вторая сабтаска", "описание", NEW, 40, "2022-08-06T14:30:00", 3);
         epic2 = new Epic("Второй эпик", "описание");
         subTask3 = new SubTask("Третья сабтаска", "описание", NEW, 60, "2022-08-29T15:30:00", 6);
+        manager.createTask(task1);
+        manager.createTask(task2);
+        manager.createEpic(epic1);
+        manager.createSubtask(subTask1);
+        manager.createSubtask(subTask2);
+        manager.createEpic(epic2);
+        manager.createSubtask(subTask3);
     }
-
     @AfterEach
     void clear() {
         manager.clearTasks();
@@ -41,13 +47,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void shouldReturnStatusNEW() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         //Если пустой Epic
         assertEquals(NEW, manager.findEpicById(3).getStatus());
         //Если subTask в статусе NEW
@@ -56,13 +55,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void shouldReturnStatusDONE() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         subTask1.setStatus(DONE);
         subTask2.setStatus(DONE);
         subTask3.setStatus(DONE);
@@ -77,13 +69,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void shouldReturnStatusINPROGRESS() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         subTask1.setStatus(NEW);
         subTask2.setStatus(DONE);
         subTask3.setStatus(IN_PROGRESS);
@@ -99,13 +84,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void createTask() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         final Task returnedTask = manager.findTasksById(1);
 
         assertNotNull(returnedTask, "Task not found");
@@ -119,13 +97,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void createEpic() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         final Epic returnedEpic = manager.findEpicById(3);
 
         assertNotNull(returnedEpic, "Epic not found");
@@ -143,13 +114,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void createSubTask() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         final SubTask returnedSubTask = manager.findSubTasksById(4);
         final SubTask secondReturnedSubTask = manager.findSubTasksById(5);
         final SubTask thirdReturnedSubTask = manager.findSubTasksById(7);
@@ -164,13 +128,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getAllTaskList() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         final List<Task> tasks = manager.getAllTaskList();
 
         assertNotNull(tasks, "Tasks list is empty");
@@ -179,13 +136,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void findTaskById() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         final Task returnedTask = manager.findTasksById(2);
 
         assertNotNull(returnedTask, "Task not found");
@@ -194,13 +144,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void findEpicById() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         final Epic returnedEpic = manager.findEpicById(6);
 
         assertNotNull(returnedEpic, "Epic not found");
@@ -210,13 +153,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void findSubTaskById() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         final SubTask returnedSubTask = manager.findSubTasksById(4);
 
         assertNotNull(returnedSubTask, "subTask not found");
@@ -225,13 +161,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void updateTask_shouldReturnStatusDone() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         task1.setStatus(TaskStatus.DONE);
         manager.updateTask(task1);
         Task returnedTask = manager.findTasksById(1);
@@ -241,13 +170,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void updateEpic_shouldReturnNewDescription() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         epic1.setDescription("changed Desc");
         manager.updateEpic(epic1);
         Task returnedEpic = manager.findEpicById(3);
@@ -257,13 +179,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void updateSubTask_shouldReturnNewDescription() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
         subTask2.setDescription("new desc");
         manager.updateSubTask(subTask2);
 
@@ -274,14 +189,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void deleteTaskById_shouldBe0() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
-
         manager.deleteTaskById(1);
         manager.deleteTaskById(2);
         final List<Task> returnedList = manager.getTasks();
@@ -291,14 +198,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void deleteEpicById_shouldBe0() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
-
         manager.deleteEpicById(3);
         manager.deleteEpicById(6);
         final List<Epic> returnedList = manager.getEpics();
@@ -308,14 +207,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void deleteSubTaskById_shouldReturnEmptyList() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
-
         manager.deleteSubTaskById(4);
         manager.deleteSubTaskById(5);
         manager.deleteSubTaskById(7);
@@ -329,13 +220,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void clearTaskList_shouldBe0() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
 
         manager.clearTasks();
         final List<Task> returnedList = manager.getTasks();
@@ -345,14 +229,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void clearEpicList_shouldBe0() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
-
         manager.clearEpicsList();
         final List<Epic> returnedList = manager.getEpics();
 
@@ -361,14 +237,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void clearSubTaskList_shouldBe0() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
-
         manager.clearSubtasksList();
 
         final List<SubTask> returnedSubTaskList = manager.getSubtasks();
@@ -377,14 +245,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void shouldReturnDuration80() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
-
         Epic returnedEpic = manager.findEpicById(3);
 
         assertEquals(80, returnedEpic.getDuration(), "Duration not match");
@@ -392,14 +252,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void shouldReturnEndTimeNotNull() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-        manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
-        manager.createEpic(epic2);
-        manager.createSubtask(subTask3);
-
         Epic returnedEpic = manager.findEpicById(3);
         Task returnedTask = manager.findTasksById(1);
 
@@ -413,19 +265,15 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void shouldReturnNull() {
-        manager.createTask(task1);
-        manager.createTask(task2);
-        manager.createEpic(epic1);
-
         Epic returnedEpic = manager.findEpicById(3);
+        manager.deleteSubTaskById(4);
+        manager.deleteSubTaskById(5);
 
         assertNull(returnedEpic.getEndTime(), "EndTime not null");
     }
 
     @Test
     void shouldThrowTaskValidationException() {
-        manager.createTask(task1);
-        manager.createTask(task2);
         task1.setStartTime("2022-08-09T12:50:00");
 
         TaskValidationException exception = assertThrows(TaskValidationException.class, () -> manager.updateTask(task1));
