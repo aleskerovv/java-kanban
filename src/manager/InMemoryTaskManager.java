@@ -13,14 +13,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> taskManager;
     protected final HistoryManager historyManager = Managers.getDefaultHistory();
     private int id = 0;
-    protected Set<Task> sortedTasks = new TreeSet<>((t1, t2) -> (t1.getStartTime() == null)
-            ? 1
-            : (t2.getStartTime() == null)
-            ? -1
-            : ((t1.getStartTime().compareTo(t2.getStartTime())) == 0)
-            ? (t1.getId() - t2.getId())
-            : (t1.getStartTime().compareTo(t2.getStartTime()))
-    );
+    protected Set<Task> sortedTasks = new TreeSet<>(new TaskComparator());
 
     public InMemoryTaskManager() {
         this.taskManager = new HashMap<>();
@@ -45,11 +38,11 @@ public class InMemoryTaskManager implements TaskManager {
     final Map<Integer, Task> tasks = new HashMap<>();
 
     public void taskValidator(Task task) {
-        for (Task t : sortedTasks) {
-                if (isIntersectPeriod(t, task))
-                    throw new TaskValidationException(String.format("Failed validation of task %s\n " +
-                                    "due to time crossing with another task %s"
-                            , task.getTitle(), t.getTitle()));
+            for (Task t : sortedTasks) {
+                    if (isIntersectPeriod(t, task))
+                        throw new TaskValidationException(String.format("Failed validation of task %s\n " +
+                                        "due to time crossing with another task %s"
+                                , task.getTitle(), t.getTitle()));
         }
     }
 
@@ -59,6 +52,14 @@ public class InMemoryTaskManager implements TaskManager {
 
         LocalDateTime secondStart = anotherTask.getStartTime();
         LocalDateTime secondEnd = anotherTask.getEndTime();
+
+        if (firstStart == null) {
+            return false;
+        }
+
+        if (secondStart == null) {
+            return false;
+        }
 
         return !firstEnd.isBefore(secondStart) && !firstStart.isAfter(secondEnd);
     }
@@ -348,5 +349,21 @@ public class InMemoryTaskManager implements TaskManager {
 
     Integer getNextId() {
         return ++id;
+    }
+}
+
+class TaskComparator implements Comparator<Task> {
+    @Override
+    public int compare(Task e1, Task e2) {
+        if (e1.equals(e2)) {
+            return 0;
+        }
+        if (e1.getStartTime() == null) {
+            return 1;
+        } else if (e2.getStartTime() == null) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }
