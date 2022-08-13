@@ -19,8 +19,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         if (o1.getStartTime() == null && o2.getStartTime() == null) {
             return o1.getId() - o2.getId();
-        }
-        else if (o1.getStartTime() == null) {
+        } else if (o1.getStartTime() == null) {
             return 1;
         } else if (o2.getStartTime() == null) {
             return -1;
