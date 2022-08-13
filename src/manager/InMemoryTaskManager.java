@@ -368,19 +368,3 @@ public class InMemoryTaskManager implements TaskManager {
         return ++id;
     }
 }
-
-class TaskComparator implements Comparator<Task> {
-    @Override
-    public int compare(Task e1, Task e2) {
-        if (e1.equals(e2)) {
-            return 0;
-        }
-        if (e1.getStartTime() == null) {
-            return 1;
-        } else if (e2.getStartTime() == null) {
-            return -1;
-        } else {
-            return 0;
-        }
-    }
-}
