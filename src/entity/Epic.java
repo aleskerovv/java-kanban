@@ -9,7 +9,7 @@ import static entity.TaskStatus.*;
 import static entity.TaskType.EPIC;
 
 public class Epic extends Task {
-    LocalDateTime endTime;
+    private LocalDateTime endTime;
 
     protected List<Integer> subTasks = new ArrayList<>();
 

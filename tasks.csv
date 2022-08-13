@@ -1,4 +1,5 @@
 id,type,name,status,description,duration,startTime,endTime,epic
 1,TASK,Первая таска,NEW,описание,50,null,null
-2,TASK,Втоаря таска,DONE,описание,30,2022-08-09T12:50,2022-08-09T13:20
+2,TASK,Вторая таска,DONE,описание,50,null,null
+4,TASK,Четвертая,IN_PROGRESS,описание,60,2022-08-09T13:30,2022-08-09T14:30
 

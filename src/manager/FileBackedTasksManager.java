@@ -27,16 +27,20 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         final File filePath = new File("tasks.csv");
         FileBackedTasksManager manager = new FileBackedTasksManager(filePath);
         Task task1 = new Task("Первая таска", "описание", NEW, 50);
-        Task task2 = new Task("Втоаря таска", "описание", DONE, 30, "2022-08-09T12:50:00");
+        Task task2 = new Task("Вторая таска", "описание", DONE, 50);
+        Task task3 = new Task("Третья таска", "описание", IN_PROGRESS, 60, "2022-08-09T12:30:00");
+        Task task4 = new Task("Четвертая", "описание", IN_PROGRESS, 60, "2022-08-09T13:30:00");
 //        Epic epic1 = new Epic("Эпик", "описание");
 //        SubTask subTask1 = new SubTask("Первая сабтаска", "описание", NEW, 40, "2022-08-05T13:50:00", 3);
 //        SubTask subTask2 = new SubTask("Вторая сабтаска", "описание", NEW, 40, "2022-08-06T14:30:00", 3);
         manager.createTask(task1);
         manager.createTask(task2);
+        manager.createTask(task3);
+        manager.createTask(task4);
 //        manager.createEpic(epic1);
 //        manager.createSubtask(subTask1);
 //        manager.createSubtask(subTask2);
-//        manager.deleteTaskById(1);
+//        manager.deleteTaskById(3);
         System.out.println(manager.getPrioritizedTasks());
 //        //Удаляем сабтаски у Эпика и проверяем, что сбросилось duration, startTime, endTime
 //        manager.deleteSubTaskById(subTask.getId());

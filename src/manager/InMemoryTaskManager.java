@@ -13,7 +13,21 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> taskManager;
     protected final HistoryManager historyManager = Managers.getDefaultHistory();
     private int id = 0;
-    protected Set<Task> sortedTasks = new TreeSet<>(new TaskComparator());
+    protected Set<Task> sortedTasks = new TreeSet<>((o1, o2) -> {
+        if (o1.getId().equals(o2.getId())) {
+            return 0;
+        }
+        if (o1.getStartTime() == null && o2.getStartTime() == null) {
+            return o1.getId() - o2.getId();
+        }
+        else if (o1.getStartTime() == null) {
+            return 1;
+        } else if (o2.getStartTime() == null) {
+            return -1;
+        } else {
+            return o1.getStartTime().compareTo(o2.getStartTime());
+        }
+    });
 
     public InMemoryTaskManager() {
         this.taskManager = new HashMap<>();
@@ -61,7 +75,8 @@ public class InMemoryTaskManager implements TaskManager {
             return false;
         }
 
-        return !firstEnd.isBefore(secondStart) && !firstStart.isAfter(secondEnd);
+        return !firstEnd.isBefore(secondStart) && !firstStart.isAfter(secondEnd)
+                && !firstStart.isEqual(secondEnd) && !secondStart.isEqual(firstEnd);
     }
 
     @Override
@@ -110,7 +125,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
-        sortedTasks.remove(task);
+        final Task currentTask = tasks.get(task.getId());
+        sortedTasks.remove(currentTask);
         taskValidator(task);
         tasks.put(task.getId(), task);
         sortedTasks.add(task);
@@ -228,7 +244,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubTask(SubTask subTask) {
-        sortedTasks.remove(subTask);
+        final SubTask currentSubTask = subTasks.get(subTask.getId());
+        sortedTasks.remove(currentSubTask);
         taskValidator(subTask);
         deleteSubTaskById(subTask.getId());
         subTasks.put(subTask.getId(), subTask);
