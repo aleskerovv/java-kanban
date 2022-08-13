@@ -51,11 +51,11 @@ public class InMemoryTaskManager implements TaskManager {
     final Map<Integer, Task> tasks = new HashMap<>();
 
     public void taskValidator(Task task) {
-            for (Task t : sortedTasks) {
-                    if (isIntersectPeriod(t, task))
-                        throw new TaskValidationException(String.format("Failed validation of task %s\n " +
-                                        "due to time crossing with another task %s"
-                                , task.getTitle(), t.getTitle()));
+        for (Task t : sortedTasks) {
+            if (isIntersectPeriod(t, task))
+                throw new TaskValidationException(String.format("Failed validation of task %s\n " +
+                                "due to time crossing with another task %s"
+                        , task.getTitle(), t.getTitle()));
         }
     }
 

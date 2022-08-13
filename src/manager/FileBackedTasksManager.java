@@ -59,7 +59,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         manager.findTasksById(1);
         System.out.println(manager.getAllTaskList());
         System.out.println(manager.getHistory());*/ //Если просто считать файл и запустить методы с 47 и 48 строки
-                                                    //Можно будет увидеть, что все восстановилось актуально
+        //Можно будет увидеть, что все восстановилось актуально
 
         //Проверяем, что сохраняется уникальность просмотра истории в файле
 /*        manager.findTasksById(1);
@@ -189,11 +189,18 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         switch (taskType) {
             case TASK:
-                task = new Task(title, description
-                        , status
-                        , duration
-                        , startTime
-                        , id);
+                if (startTime.equals("null")) {
+                    task = new Task(title, description
+                            , status
+                            , duration
+                            , id);
+                } else {
+                    task = new Task(title, description
+                            , status
+                            , duration
+                            , startTime
+                            , id);
+                }
                 break;
             case EPIC:
                 task = new Epic(title
@@ -201,13 +208,21 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                         , id);
                 break;
             case SUBTASK:
-                Integer epicId  = Integer.valueOf(array[8]);
-                task = new SubTask(title, description
-                        , status
-                        , duration
-                        , startTime
-                        , epicId
-                        , id);
+                Integer epicId = Integer.valueOf(array[8]);
+                if (startTime.equals("null")) {
+                    task = new SubTask(title, description
+                            , status
+                            , duration
+                            , epicId
+                            , id);
+                } else {
+                    task = new SubTask(title, description
+                            , status
+                            , duration
+                            , startTime
+                            , epicId
+                            , id);
+                }
                 break;
             default:
                 break;

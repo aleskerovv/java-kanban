@@ -1,7 +1,6 @@
 package entity;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import static entity.TaskType.TASK;
@@ -14,7 +13,6 @@ public class Task {
     protected TaskType type;
     protected long duration;
     protected LocalDateTime startTime;
-//    protected LocalDateTime endTime;
 
     public Task() {
 
