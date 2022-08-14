@@ -1,11 +1,11 @@
 import entity.Task;
 import entity.TaskStatus;
-import entity.TaskType;
 import manager.HistoryManager;
 import manager.Managers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +21,11 @@ class HistoryManagerTest {
 
     @Test
     void addTask() {
-        Task task = new Task("Task", "desc", TaskStatus.NEW, 50, "2022-08-08T12:00:00", 1);
+        Task task = new Task("Task", "desc", TaskStatus.NEW, 50
+                , LocalDateTime.parse("2022-08-08T12:00:00"), 1);
         manager.addTask(task);
-        Task task2 = new Task("task2", "desc", TaskStatus.DONE, 50, "2022-08-08T12:00:00", 2);
+        Task task2 = new Task("task2", "desc", TaskStatus.DONE, 50
+                , LocalDateTime.parse("2022-08-08T12:00:00"), 2);
         manager.addTask(task2);
 
         final List<Task> returnedList = manager.getHistory();
@@ -33,11 +35,14 @@ class HistoryManagerTest {
 
     @Test
     void removeFirst() {
-        Task task = new Task("Task", "desc", TaskStatus.NEW, 50, "2022-08-08T12:00:00", 1);
+        Task task = new Task("Task", "desc", TaskStatus.NEW, 50
+                , LocalDateTime.parse("2022-08-09T12:00:00"), 1);
         manager.addTask(task);
-        Task task2 = new Task("task2", "desc", TaskStatus.DONE, 50, "2022-08-08T12:00:00", 2);
+        Task task2 = new Task("task2", "desc", TaskStatus.DONE, 50
+                , LocalDateTime.parse("2022-08-08T12:00:00"), 2);
         manager.addTask(task2);
-        Task task3 = new Task("task3", "desc", TaskStatus.DONE, 50, "2022-08-08T12:00:00", 3);
+        Task task3 = new Task("task3", "desc", TaskStatus.DONE, 50
+                , LocalDateTime.parse("2022-08-10T12:00:00"), 3);
         manager.addTask(task3);
 
         manager.remove(1);
@@ -49,11 +54,14 @@ class HistoryManagerTest {
 
     @Test
     void removeLast() {
-        Task task = new Task("Task", "desc", TaskStatus.NEW, 50, "2022-08-08T12:00:00", 1);
+        Task task = new Task("Task", "desc", TaskStatus.NEW, 50
+                , LocalDateTime.parse("2022-08-09T12:00:00"), 1);
         manager.addTask(task);
-        Task task2 = new Task("task2", "desc", TaskStatus.DONE, 50, "2022-08-08T12:00:00", 2);
+        Task task2 = new Task("task2", "desc", TaskStatus.DONE, 50
+                , LocalDateTime.parse("2022-08-08T12:00:00"), 2);
         manager.addTask(task2);
-        Task task3 = new Task("task3", "desc", TaskStatus.DONE, 50, "2022-08-08T12:00:00", 3);
+        Task task3 = new Task("task3", "desc", TaskStatus.DONE, 50
+                , LocalDateTime.parse("2022-08-10T12:00:00"), 3);
         manager.addTask(task3);
 
         manager.remove(3);
@@ -65,11 +73,14 @@ class HistoryManagerTest {
 
     @Test
     void removeMiddle() {
-        Task task = new Task("Task", "desc", TaskStatus.NEW, 50, "2022-08-08T12:00:00", 1);
+        Task task = new Task("Task", "desc", TaskStatus.NEW, 50
+                , LocalDateTime.parse("2022-08-09T12:00:00"), 1);
         manager.addTask(task);
-        Task task2 = new Task("task2", "desc", TaskStatus.DONE, 50, "2022-08-08T12:00:00",2);
+        Task task2 = new Task("task2", "desc", TaskStatus.DONE, 50
+                , LocalDateTime.parse("2022-08-08T12:00:00"), 2);
         manager.addTask(task2);
-        Task task3 = new Task("task3", "desc", TaskStatus.DONE, 50, "2022-08-08T12:00:00",3);
+        Task task3 = new Task("task3", "desc", TaskStatus.DONE, 50
+                , LocalDateTime.parse("2022-08-10T12:00:00"), 3);
         manager.addTask(task3);
 
         manager.remove(2);
@@ -89,11 +100,14 @@ class HistoryManagerTest {
 
     @Test
     void checkDistinctHistory() {
-        Task task = new Task("Task", "desc", TaskStatus.NEW, 50, "2022-08-08T12:00:00", 1);
+        Task task = new Task("Task", "desc", TaskStatus.NEW, 50
+                , LocalDateTime.parse("2022-08-09T12:00:00"), 1);
         manager.addTask(task);
-        Task task2 = new Task("task2", "desc", TaskStatus.DONE, 50, "2022-08-08T12:00:00", 2);
+        Task task2 = new Task("task2", "desc", TaskStatus.DONE, 50
+                , LocalDateTime.parse("2022-08-08T12:00:00"), 2);
         manager.addTask(task2);
-        Task task3 = new Task("task3", "desc", TaskStatus.DONE, 50, "2022-08-08T12:00:00", 3);
+        Task task3 = new Task("task3", "desc", TaskStatus.DONE, 50
+                , LocalDateTime.parse("2022-08-10T12:00:00"), 3);
         manager.addTask(task3);
         manager.addTask(task2);
         manager.addTask(task);

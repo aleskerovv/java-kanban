@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTasksManager> {
+class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTasksManager> {
     public FileBackedTaskManagerTest() throws FileNotFoundException {
         super.manager = Managers.loadFromFile(new File("tests.csv"));
     }

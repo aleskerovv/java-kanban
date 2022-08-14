@@ -8,24 +8,28 @@ import static entity.TaskType.SUBTASK;
 public class SubTask extends Task {
     protected Integer epicId;
 
-    public SubTask(String title, String description, TaskStatus status, long duration, Integer epicId) {
-        super(title, description);
-        this.status = status;
-        this.epicId = epicId;
+    public SubTask(String title, String description, TaskStatus status, long duration, LocalDateTime startTime, Integer epicId) {
+        super(title, description, status, duration, startTime);
         this.type = SUBTASK;
-        this.duration = duration;
+        this.epicId = epicId;
     }
-    public SubTask(String title, String description, TaskStatus status, long duration, String startTime, Integer epicId) {
-        this(title, description, status, duration, epicId);
-        this.startTime = LocalDateTime.parse(startTime);
+
+    public SubTask(String title, String description, TaskStatus status, long duration, LocalDateTime startTime, Integer epicId, Integer id) {
+        super(title, description, status, duration, startTime, id);
+        this.type = SUBTASK;
+        this.epicId = epicId;
     }
+
     public SubTask(String title, String description, TaskStatus status, long duration, Integer epicId, Integer id) {
-        this(title, description, status, duration, epicId);
-        this.id = id;
+        super(title, description, status, duration, id);
+        this.type = SUBTASK;
+        this.epicId = epicId;
     }
-    public SubTask(String title, String description, TaskStatus status, long duration, String startTime, Integer epicId, Integer id) {
-        this(title, description, status, duration, startTime, epicId);
-        this.id = id;
+
+    public SubTask(String title, String description, TaskStatus status, long duration, Integer epicId) {
+        super(title, description, status, duration);
+        this.type = SUBTASK;
+        this.epicId = epicId;
     }
 
     @Override

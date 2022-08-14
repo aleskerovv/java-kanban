@@ -18,11 +18,11 @@ public class Task {
 
     }
 
-    public Task(String title, String description, TaskStatus status, long duration, String startTime) {
+    public Task(String title, String description, TaskStatus status, long duration, LocalDateTime startTime) {
         this(title, description);
         this.duration = duration;
         this.status = status;
-        this.startTime = LocalDateTime.parse(startTime);
+        this.startTime = startTime;
         this.type = TASK;
     }
 
@@ -32,20 +32,13 @@ public class Task {
         this.type = TASK;
     }
 
-    public Task(String title, String description, long duration, String startTime) {
-        this.title = title;
-        this.description = description;
-        this.duration = duration;
-        this.startTime = LocalDateTime.parse(startTime);
-        this.type = TASK;
-    }
 
-    public Task(String title, String description, TaskStatus status, long duration, String startTime, Integer id) {
+    public Task(String title, String description, TaskStatus status, long duration, LocalDateTime startTime, Integer id) {
         this(title, description);
         this.status = status;
         this.type = TASK;
         this.duration = duration;
-        this.startTime = LocalDateTime.parse(startTime);
+        this.startTime = startTime;
         this.id = id;
     }
 
@@ -56,6 +49,7 @@ public class Task {
         this.duration = duration;
         this.id = id;
     }
+
     public Task(String title, String description, TaskStatus status, long duration) {
         this(title, description);
         this.status = status;

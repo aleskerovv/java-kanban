@@ -23,13 +23,18 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @BeforeEach
     void create() {
-        task1 = new Task("Первая таска", "описание", NEW, 50, "2022-08-23T15:00:00");
-        task2 = new Task("Втоаря таска", "описание", DONE, 30, "2022-08-09T12:50:00");
+        task1 = new Task("Первая таска", "описание", NEW, 50
+                , LocalDateTime.parse("2022-08-23T15:00:00"));
+        task2 = new Task("Вторая таска", "описание", DONE, 30
+                , LocalDateTime.parse("2022-08-09T12:50:00"));
         epic1 = new Epic("Эпик", "описание");
-        subTask1 = new SubTask("Первая сабтаска", "описание", NEW, 40, "2022-08-05T13:50:00", 3);
-        subTask2 = new SubTask("Вторая сабтаска", "описание", NEW, 40, "2022-08-06T14:30:00", 3);
+        subTask1 = new SubTask("Первая сабтаска", "описание", NEW, 40
+                , LocalDateTime.parse("2022-08-05T13:50:00"), 3);
+        subTask2 = new SubTask("Вторая сабтаска", "описание", NEW, 40
+                , LocalDateTime.parse("2022-08-06T14:30:00"), 3);
         epic2 = new Epic("Второй эпик", "описание");
-        subTask3 = new SubTask("Третья сабтаска", "описание", NEW, 60, "2022-08-29T15:30:00", 6);
+        subTask3 = new SubTask("Третья сабтаска", "описание", NEW, 60
+                , LocalDateTime.parse("2022-08-29T15:30:00"), 6);
         manager.createTask(task1);
         manager.createTask(task2);
         manager.createEpic(epic1);
@@ -274,11 +279,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void shouldThrowTaskValidationException() {
-        task1.setStartTime("2022-08-09T12:50:00");
+        task2.setStartTime("2022-08-23T15:00:00");
 
-        TaskValidationException exception = assertThrows(TaskValidationException.class, () -> manager.updateTask(task1));
+        TaskValidationException exception = assertThrows(TaskValidationException.class, () -> manager.updateTask(task2));
         String message = String.format("Failed validation of task %s" +
-                "\n due to time crossing with another task %s", task1.getTitle(), task2.getTitle());
+                "\n due to time crossing with another task %s", task2.getTitle(), task1.getTitle());
 
         assertEquals(message, exception.getMessage());
         manager.clearTasks();
