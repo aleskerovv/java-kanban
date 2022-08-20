@@ -101,22 +101,20 @@ public class HttpTaskServer {
                     if (query == null) {
                         manager.clearTasks();
                         httpExchange.sendResponseHeaders(200, 0);
-                        try (OutputStream os = httpExchange.getResponseBody()) {
-                        }
+//                        try (OutputStream os = httpExchange.getResponseBody()) {
+//                        }
                     } else {
                         int id = Integer.parseInt(queryMap.get("id"));
                         try {
                             manager.deleteTaskById(id);
                             httpExchange.sendResponseHeaders(200, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                            }
                         } catch (NullPointerException e) {
-                            response = "Task with id " + id + " does not exists";
                             httpExchange.sendResponseHeaders(400, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                                os.write(response.getBytes());
-                            }
                         }
+                    }
+                    try (OutputStream os = httpExchange.getResponseBody()) {
                     }
                     break;
                 case "POST":
@@ -128,8 +126,8 @@ public class HttpTaskServer {
                             task.setType(TaskType.TASK);
                             manager.updateTask(task);
                             httpExchange.sendResponseHeaders(200, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                            }
                         } catch (TaskValidationException e) {
                             httpExchange.sendResponseHeaders(400, 0);
                             response = e.getMessage();
@@ -142,8 +140,8 @@ public class HttpTaskServer {
                             Task task = gson.fromJson(body, Task.class);
                             manager.createTask(task);
                             httpExchange.sendResponseHeaders(201, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                            }
                         } catch (TaskValidationException e) {
                             httpExchange.sendResponseHeaders(400, 0);
                             response = e.getMessage();
@@ -173,46 +171,47 @@ public class HttpTaskServer {
                     if (query == null) {
                         response = gson.toJson(manager.getEpics());
                         httpExchange.sendResponseHeaders(200, 0);
-                        try (OutputStream os = httpExchange.getResponseBody()) {
-                            os.write(response.getBytes());
-                        }
+//                        try (OutputStream os = httpExchange.getResponseBody()) {
+//                            os.write(response.getBytes());
+//                        }
                     } else {
                         int id = Integer.parseInt(queryMap.get("id"));
                         try {
                             response = gson.toJson(manager.findEpicById(id));
                             httpExchange.sendResponseHeaders(200, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                                os.write(response.getBytes());
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                                os.write(response.getBytes());
+//                            }
                         } catch (NullPointerException e) {
                             response = "Epic with id " + id + " does not exists";
                             httpExchange.sendResponseHeaders(400, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                                os.write(response.getBytes());
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                                os.write(response.getBytes());
+//                            }
                         }
+                    }
+                    try (OutputStream os = httpExchange.getResponseBody()) {
+                        os.write(response.getBytes());
                     }
                     break;
                 case "DELETE":
                     if (query == null) {
                         manager.clearEpicsList();
                         httpExchange.sendResponseHeaders(200, 0);
-                        try (OutputStream os = httpExchange.getResponseBody()) {
-                        }
+//                        try (OutputStream os = httpExchange.getResponseBody()) {
+//                        }
                     } else {
                         int id = Integer.parseInt(queryMap.get("id"));
                         try {
                             manager.deleteEpicById(id);
                             httpExchange.sendResponseHeaders(200, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                            }
                         } catch (NullPointerException e) {
-                            response = "Epic with id " + id + " does not exists";
                             httpExchange.sendResponseHeaders(400, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                                os.write(response.getBytes());
-                            }
                         }
+                    }
+                    try (OutputStream os = httpExchange.getResponseBody()) {
                     }
                     break;
                 case "POST":
@@ -221,11 +220,11 @@ public class HttpTaskServer {
                     if (body.contains("\"id\"")) {
                         try {
                             Epic epic = gson.fromJson(body, Epic.class);
-                            epic.setType(TaskType.SUBTASK);
+                            epic.setType(TaskType.EPIC);
                             manager.updateEpic(epic);
                             httpExchange.sendResponseHeaders(200, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                            }
                         } catch (TaskValidationException e) {
                             httpExchange.sendResponseHeaders(400, 0);
                             response = e.getMessage();
@@ -238,8 +237,8 @@ public class HttpTaskServer {
                             Epic epic = gson.fromJson(body, Epic.class);
                             manager.createEpic(epic);
                             httpExchange.sendResponseHeaders(201, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                            }
                         } catch (TaskValidationException e) {
                             httpExchange.sendResponseHeaders(400, 0);
                             response = e.getMessage();
@@ -270,61 +269,62 @@ public class HttpTaskServer {
                     if (query == null) {
                         response = gson.toJson(manager.getSubtasks());
                         httpExchange.sendResponseHeaders(200, 0);
-                        try (OutputStream os = httpExchange.getResponseBody()) {
-                            os.write(response.getBytes());
-                        }
+//                        try (OutputStream os = httpExchange.getResponseBody()) {
+//                            os.write(response.getBytes());
+//                        }
                     } else if (key.contains("epic")) {
                         int id = Integer.parseInt(queryMap.get("id"));
                         try {
                             response = gson.toJson(manager.getEpicsSubTasks(id));
                             httpExchange.sendResponseHeaders(200, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                                os.write(response.getBytes());
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                                os.write(response.getBytes());
+//                            }
                         } catch (NullPointerException e) {
                             response = "Subtask with id " + id + " does not exists";
                             httpExchange.sendResponseHeaders(400, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                                os.write(response.getBytes());
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                                os.write(response.getBytes());
+//                            }
                         }
                     } else {
                         int id = Integer.parseInt(queryMap.get("id"));
                         try {
                             response = gson.toJson(manager.findSubTasksById(id));
                             httpExchange.sendResponseHeaders(200, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                                os.write(response.getBytes());
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                                os.write(response.getBytes());
+//                            }
                         } catch (NullPointerException e) {
                             response = "Subtask with id " + id + " does not exists";
                             httpExchange.sendResponseHeaders(400, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                                os.write(response.getBytes());
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                                os.write(response.getBytes());
+//                            }
                         }
+                    }
+                    try (OutputStream os = httpExchange.getResponseBody()) {
+                        os.write(response.getBytes());
                     }
                     break;
                 case "DELETE":
                     if (query == null) {
                         manager.clearSubtasksList();
                         httpExchange.sendResponseHeaders(200, 0);
-                        try (OutputStream os = httpExchange.getResponseBody()) {
-                        }
+//                        try (OutputStream os = httpExchange.getResponseBody()) {
+//                        }
                     } else {
                         int id = Integer.parseInt(queryMap.get("id"));
                         try {
                             manager.deleteSubTaskById(id);
                             httpExchange.sendResponseHeaders(200, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                            }
                         } catch (NullPointerException e) {
-                            response = "SubTask with id " + id + " does not exists";
                             httpExchange.sendResponseHeaders(400, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                                os.write(response.getBytes());
-                            }
                         }
+                    }
+                    try (OutputStream os = httpExchange.getResponseBody()) {
                     }
                     break;
                 case "POST":
@@ -336,8 +336,8 @@ public class HttpTaskServer {
                             subTask.setType(TaskType.SUBTASK);
                             manager.updateSubTask(subTask);
                             httpExchange.sendResponseHeaders(200, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                            }
                         } catch (TaskValidationException e) {
                             httpExchange.sendResponseHeaders(400, 0);
                             response = e.getMessage();
@@ -350,8 +350,8 @@ public class HttpTaskServer {
                             SubTask subTask = gson.fromJson(body, SubTask.class);
                             manager.createSubtask(subTask);
                             httpExchange.sendResponseHeaders(201, 0);
-                            try (OutputStream os = httpExchange.getResponseBody()) {
-                            }
+//                            try (OutputStream os = httpExchange.getResponseBody()) {
+//                            }
                         } catch (TaskValidationException e) {
                             httpExchange.sendResponseHeaders(400, 0);
                             response = e.getMessage();
@@ -360,8 +360,6 @@ public class HttpTaskServer {
                             }
                         }
                     }
-                    break;
-                default:
                     break;
             }
         }
@@ -385,9 +383,9 @@ public class HttpTaskServer {
                     }
                     break;
                 default:
-                    httpExchange.sendResponseHeaders(204, 0);
-                    try (OutputStream os = httpExchange.getResponseBody()) {
-                    }
+                    httpExchange.sendResponseHeaders(404, 0);
+//                    try (OutputStream os = httpExchange.getResponseBody()) {
+//                    }
                     break;
             }
         }
@@ -435,6 +433,6 @@ public class HttpTaskServer {
     }
 
     public void stop() {
-        server.stop(1000);
+        server.stop(1);
     }
 }

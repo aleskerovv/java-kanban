@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static entity.TaskStatus.*;
 import static entity.TaskType.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
@@ -27,20 +28,20 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         //Создаем FileBackedTaskManager, создаем и записываем в него Задачи
         final File filePath = new File("tasks.csv");
         FileBackedTasksManager manager = new FileBackedTasksManager(filePath);
-//        Task task1 = new Task("Первая таска", "описание", NEW, 50, LocalDateTime.parse("2022-08-01T11:10:00"));
-//        Task task2 = new Task("Вторая таска", "описание", DONE, 50);
-//        Task task3 = new Task("Третья таска", "описание", IN_PROGRESS, 60, LocalDateTime.parse("2022-08-09T12:30:00"));
-//        Task task4 = new Task("Четвертая", "описание", IN_PROGRESS, 60, LocalDateTime.parse("2022-08-09T13:30:00"));
-//        Epic epic1 = new Epic("Эпик", "описание");
-//        SubTask subTask1 = new SubTask("Первая сабтаска", "описание", NEW, 40, LocalDateTime.parse("2022-08-05T13:50:00"), 5);
-//        SubTask subTask2 = new SubTask("Вторая сабтаска", "описание", NEW, 40, LocalDateTime.parse("2022-08-06T14:30:00"), 5);
-//        manager.createTask(task1);
-//        manager.createTask(task2);
-//        manager.createTask(task3);
-//        manager.createTask(task4);
-//        manager.createEpic(epic1);
-//        manager.createSubtask(subTask1);
-//        manager.createSubtask(subTask2);
+        Task task1 = new Task("Первая таска", "описание", NEW, 50, LocalDateTime.parse("2022-08-01T11:10:00"));
+        Task task2 = new Task("Вторая таска", "описание", DONE, 50);
+        Task task3 = new Task("Третья таска", "описание", IN_PROGRESS, 60, LocalDateTime.parse("2022-08-09T12:30:00"));
+        Task task4 = new Task("Четвертая", "описание", IN_PROGRESS, 60, LocalDateTime.parse("2022-08-09T13:30:00"));
+        Epic epic1 = new Epic("Эпик", "описание");
+        SubTask subTask1 = new SubTask("Первая сабтаска", "описание", NEW, 40, LocalDateTime.parse("2022-08-05T13:50:00"), 5);
+        SubTask subTask2 = new SubTask("Вторая сабтаска", "описание", NEW, 40, LocalDateTime.parse("2022-08-06T14:30:00"), 5);
+        manager.createTask(task1);
+        manager.createTask(task2);
+        manager.createTask(task3);
+        manager.createTask(task4);
+        manager.createEpic(epic1);
+        manager.createSubtask(subTask1);
+        manager.createSubtask(subTask2);
 //        manager.deleteTaskById(3);
 //        System.out.println(manager.getPrioritizedTasks());
 //        //Удаляем сабтаски у Эпика и проверяем, что сбросилось duration, startTime, endTime
@@ -49,10 +50,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 //        System.out.println(manager.findEpicById(3));
 //        System.out.println(manager.getPrioritizedTasks());
         //Считываем список задач из файла, просматриваем их. В файле отобразится история просмотров
-        manager.createEntityFromText();
+//        manager.createEntityFromText();
 /*        Task another = new Task("another", "test", TASK, DONE);
         manager.createTask(another);*/
-        manager.findTasksById(1);
+/*        manager.findTasksById(1);
         manager.findEpicById(5);
         manager.findSubTasksById(6);
         manager.findSubTasksById(7);
@@ -60,7 +61,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         manager.findTasksById(1);
         System.out.println(manager.getAllTaskList());
         System.out.println(manager.getHistory());
-        System.out.println(manager.getPrioritizedTasks());//Если просто считать файл и запустить методы с 47 и 48 строки
+        System.out.println(manager.getPrioritizedTasks());*///Если просто считать файл и запустить методы с 47 и 48 строки
         //Можно будет увидеть, что все восстановилось актуально
 
         //Проверяем, что сохраняется уникальность просмотра истории в файле
