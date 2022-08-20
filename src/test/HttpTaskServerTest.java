@@ -68,6 +68,11 @@ class HttpTaskServerTest {
         HttpResponse<String> response3 = client.send(request3, HttpResponse.BodyHandlers.ofString());
     }
 
+    @AfterAll
+    static void stop() throws IOException {
+        new HttpTaskServer().stop();
+    }
+
     @Test
     void shouldReturnTask() throws IOException, InterruptedException {
         URI toTest = URI.create("http://localhost:8080/tasks/task/?id=1");

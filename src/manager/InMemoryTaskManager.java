@@ -169,12 +169,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteEpicById(Integer id) {
-        for (Integer subTask : epics.get(id).getSubtasks()) {
-            historyManager.remove(subTask);
-            taskManager.remove(subTask);
-            sortedTasks.remove(subTasks.get(subTask));
-            subTasks.remove(subTask);
+        if (epics.get(id).getSubtasks() != null) {
+            for (Integer subTask : epics.get(id).getSubtasks()) {
+                historyManager.remove(subTask);
+                taskManager.remove(subTask);
+                sortedTasks.remove(subTasks.get(subTask));
+                subTasks.remove(subTask);
+            }
         }
+
         historyManager.remove(id);
         epics.remove(id);
         taskManager.remove(id);
@@ -252,13 +255,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void getEpicsSubTasks(Integer id) {
-        if (epics.get(id).getSubtasks().isEmpty()) {
-            System.out.println("No active subtasks for this epic");
-            return;
-        }
-        System.out.println("Subtasks list:");
-        System.out.println(epics.get(id).getSubtasks());
+    public List<SubTask> getEpicsSubTasks(Integer id) {
+        List<SubTask> listOfSubTasks = new ArrayList<>();
+        epics.get(id).getSubtasks().stream()
+                .map(subTasks::get)
+                .forEach(listOfSubTasks::add);
+
+        return listOfSubTasks;
     }
 
     //Common method for fields calc

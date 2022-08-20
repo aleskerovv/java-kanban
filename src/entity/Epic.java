@@ -50,22 +50,38 @@ public class Epic extends Task {
         return endTime;
     }
 
+//    @Override
+//    public String toString() {
+//        String result = "Epic{" +
+//                "title='" + title + '\'' +
+//                ", description='" + description + '\'' +
+//                ", id=" + id +
+//                ", status=" + status +
+//                ", type=" + type +
+//                ", duration=" + duration + " мин." +
+//                ", startTime=" + startTime +
+//                ", endTime=" + getEndTime();
+//        if (subTasks.isEmpty())
+//            result = result + ", subtasks=Нет активных подзадач" + '}';
+//        else
+//            result = result + ", subtasks=" + subTasks + '}';
+//        return result;
+//    }
+
+
     @Override
     public String toString() {
-        String result = "Epic{" +
-                "title='" + title + '\'' +
+        return "Epic{" +
+                "endTime=" + endTime +
+                ", subTasks=" + subTasks +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status=" + status +
                 ", type=" + type +
-                ", duration=" + duration + " мин." +
+                ", duration=" + duration +
                 ", startTime=" + startTime +
-                ", endTime=" + getEndTime();
-        if (subTasks.isEmpty())
-            result = result + ", subtasks=Нет активных подзадач" + '}';
-        else
-            result = result + ", subtasks=" + subTasks + '}';
-        return result;
+                '}';
     }
 
     @Override

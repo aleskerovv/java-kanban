@@ -124,7 +124,6 @@ public class HttpTaskServer {
                     String body = new String(is.readAllBytes(), DEFAULT_CHARSET);
                     if (body.contains("\"id\"")) {
                         try {
-                            //TODO: не обновляет таску
                             Task task = gson.fromJson(body, Task.class);
                             task.setType(TaskType.TASK);
                             manager.updateTask(task);
@@ -267,11 +266,27 @@ public class HttpTaskServer {
 
             switch (method) {
                 case "GET":
+                    String key = httpExchange.getRequestURI().getPath().substring("/epic/".length());
                     if (query == null) {
                         response = gson.toJson(manager.getSubtasks());
                         httpExchange.sendResponseHeaders(200, 0);
                         try (OutputStream os = httpExchange.getResponseBody()) {
                             os.write(response.getBytes());
+                        }
+                    } else if (key.contains("epic")) {
+                        int id = Integer.parseInt(queryMap.get("id"));
+                        try {
+                            response = gson.toJson(manager.getEpicsSubTasks(id));
+                            httpExchange.sendResponseHeaders(200, 0);
+                            try (OutputStream os = httpExchange.getResponseBody()) {
+                                os.write(response.getBytes());
+                            }
+                        } catch (NullPointerException e) {
+                            response = "Subtask with id " + id + " does not exists";
+                            httpExchange.sendResponseHeaders(400, 0);
+                            try (OutputStream os = httpExchange.getResponseBody()) {
+                                os.write(response.getBytes());
+                            }
                         }
                     } else {
                         int id = Integer.parseInt(queryMap.get("id"));
