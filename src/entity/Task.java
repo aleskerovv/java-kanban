@@ -11,14 +11,14 @@ public class Task {
     protected Integer id;
     protected TaskStatus status;
     protected TaskType type;
-    protected long duration;
+    protected Integer duration;
     protected LocalDateTime startTime;
 
     public Task() {
 
     }
 
-    public Task(String title, String description, TaskStatus status, long duration, LocalDateTime startTime) {
+    public Task(String title, String description, TaskStatus status, Integer duration, LocalDateTime startTime) {
         this(title, description);
         this.duration = duration;
         this.status = status;
@@ -33,28 +33,32 @@ public class Task {
     }
 
 
-    public Task(String title, String description, TaskStatus status, long duration, LocalDateTime startTime, Integer id) {
+    public Task(String title, String description, TaskStatus status, Integer duration, LocalDateTime startTime, Integer id) {
         this(title, description);
         this.status = status;
-        this.type = TASK;
         this.duration = duration;
         this.startTime = startTime;
         this.id = id;
+        this.type = TASK;
     }
 
-    public Task(String title, String description, TaskStatus status, long duration, Integer id) {
+    public Task(String title, String description, TaskStatus status, Integer duration, Integer id) {
         this(title, description);
         this.status = status;
-        this.type = TASK;
         this.duration = duration;
         this.id = id;
+        this.type = TASK;
     }
 
-    public Task(String title, String description, TaskStatus status, long duration) {
+    public Task(String title, String description, TaskStatus status, Integer duration) {
         this(title, description);
         this.status = status;
-        this.type = TASK;
         this.duration = duration;
+        this.type = TASK;
+    }
+
+    public void setType(TaskType type) {
+        this.type = type;
     }
 
     public void setTitle(String title) {
@@ -93,15 +97,19 @@ public class Task {
         return type;
     }
 
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
     public Integer getEpic() {
         return null;
     }
 
-    public long getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 
@@ -116,13 +124,13 @@ public class Task {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
-        if (startTime == null) {
-            this.startTime = null;
-        } else {
-            this.startTime = LocalDateTime.parse(startTime);
-        }
-    }
+//    public void setStartTime(String startTime) {
+//        if (startTime == null) {
+//            this.startTime = null;
+//        } else {
+//            this.startTime = LocalDateTime.parse(startTime);
+//        }
+//    }
 
     @Override
     public String toString() {
@@ -143,12 +151,12 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return duration == task.duration
-                && Objects.equals(title, task.title)
+        return Objects.equals(title, task.title)
                 && Objects.equals(description, task.description)
                 && Objects.equals(id, task.id)
                 && status == task.status
                 && type == task.type
+                && Objects.equals(duration, task.duration)
                 && Objects.equals(startTime, task.startTime);
     }
 

@@ -8,28 +8,28 @@ import static entity.TaskType.SUBTASK;
 public class SubTask extends Task {
     protected Integer epicId;
 
-    public SubTask(String title, String description, TaskStatus status, long duration, LocalDateTime startTime, Integer epicId) {
+    public SubTask(String title, String description, TaskStatus status, Integer duration, LocalDateTime startTime, Integer epicId) {
         super(title, description, status, duration, startTime);
-        this.type = SUBTASK;
         this.epicId = epicId;
+        this.type = SUBTASK;
     }
 
-    public SubTask(String title, String description, TaskStatus status, long duration, LocalDateTime startTime, Integer epicId, Integer id) {
+    public SubTask(String title, String description, TaskStatus status, Integer duration, LocalDateTime startTime, Integer epicId, Integer id) {
         super(title, description, status, duration, startTime, id);
-        this.type = SUBTASK;
         this.epicId = epicId;
+        this.type = SUBTASK;
     }
 
-    public SubTask(String title, String description, TaskStatus status, long duration, Integer epicId, Integer id) {
+    public SubTask(String title, String description, TaskStatus status, Integer duration, Integer epicId, Integer id) {
         super(title, description, status, duration, id);
-        this.type = SUBTASK;
         this.epicId = epicId;
+        this.type = SUBTASK;
     }
 
-    public SubTask(String title, String description, TaskStatus status, long duration, Integer epicId) {
+    public SubTask(String title, String description, TaskStatus status, Integer duration, Integer epicId) {
         super(title, description, status, duration);
-        this.type = SUBTASK;
         this.epicId = epicId;
+        this.type = SUBTASK;
     }
 
     @Override
@@ -47,7 +47,9 @@ public class SubTask extends Task {
                 && Objects.equals(id, subTask.id)
                 && status == subTask.status
                 && type == subTask.type
-                && Objects.equals(epicId, subTask.epicId);
+                && Objects.equals(epicId, subTask.epicId)
+                && Objects.equals(duration, subTask.duration)
+                && Objects.equals(startTime, subTask.startTime);
     }
 
     @Override

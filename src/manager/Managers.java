@@ -2,15 +2,14 @@ package manager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.IOException;
 
 public class Managers {
-
     private Managers() {
     }
 
-    public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+    public static HttpTaskManager getDefault(String url) throws IOException {
+        return new HttpTaskManager(url);
     }
 
     public static HistoryManager getDefaultHistory() {

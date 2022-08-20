@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,7 +23,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     SubTask subTask3;
 
     @BeforeEach
-    void create() {
+    void create() throws IOException {
         task1 = new Task("Первая таска", "описание", NEW, 50
                 , LocalDateTime.parse("2022-08-23T15:00:00"));
         task2 = new Task("Вторая таска", "описание", DONE, 30
@@ -44,7 +45,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.createSubtask(subTask3);
     }
     @AfterEach
-    void clear() {
+    void clear() throws IOException {
         manager.clearTasks();
         manager.clearEpicsList();
         manager.clearSubtasksList();
@@ -279,7 +280,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void shouldThrowTaskValidationException() {
-        task2.setStartTime("2022-08-23T15:00:00");
+        task2.setStartTime(LocalDateTime.parse("2022-08-23T15:00:00"));
 
         TaskValidationException exception = assertThrows(TaskValidationException.class, () -> manager.updateTask(task2));
         String message = String.format("Failed validation of task %s" +

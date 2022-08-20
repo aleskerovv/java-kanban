@@ -78,11 +78,14 @@ public class Epic extends Task {
                 && Objects.equals(id, epic.id)
                 && status == epic.status
                 && type == epic.type
-                && Objects.equals(subTasks, epic.subTasks);
+                && Objects.equals(subTasks, epic.subTasks)
+                && Objects.equals(startTime, epic.startTime)
+                && Objects.equals(duration, epic.duration)
+                &&Objects.equals(endTime, epic.endTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, id, status, type, subTasks);
+        return Objects.hash(title, description, id, status, type, subTasks, duration, startTime, endTime);
     }
 }
