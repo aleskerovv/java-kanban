@@ -65,24 +65,29 @@ public class HttpTaskManager extends FileBackedTasksManager {
 
         JsonArray tasks = source.get("tasks").getAsJsonArray();
         tasks.forEach(e -> {
-                    JsonObject jsonTask = e.getAsJsonObject();
-                    Task task = gson.fromJson(jsonTask, Task.class);
-                    httpManager.createTask(task);
-                });
+            JsonObject jsonTask = e.getAsJsonObject();
+            Task task = gson.fromJson(jsonTask, Task.class);
+            httpManager.tasks.put(task.getId(), task);
+            httpManager.taskManager.put(task.getId(), task);
+            httpManager.sortedTasks.add(task);
+        });
 
         JsonArray epics = source.get("epics").getAsJsonArray();
         epics.forEach(e -> {
-                    JsonObject jsonEpic = e.getAsJsonObject();
-                    Epic epic = gson.fromJson(jsonEpic, Epic.class);
-                    httpManager.createEpic(epic);
-                });
+            JsonObject jsonEpic = e.getAsJsonObject();
+            Epic epic = gson.fromJson(jsonEpic, Epic.class);
+            httpManager.epics.put(epic.getId(), epic);
+            httpManager.taskManager.put(epic.getId(), epic);
+        });
 
         JsonArray subTasks = source.get("subTasks").getAsJsonArray();
         subTasks.forEach(e -> {
-                    JsonObject jsonSubTask = e.getAsJsonObject();
-                    SubTask subTask = gson.fromJson(jsonSubTask, SubTask.class);
-                    httpManager.createSubtask(subTask);
-                });
+            JsonObject jsonSubTask = e.getAsJsonObject();
+            SubTask subTask = gson.fromJson(jsonSubTask, SubTask.class);
+            httpManager.subTasks.put(subTask.getId(), subTask);
+            httpManager.taskManager.put(subTask.getId(), subTask);
+            httpManager.sortedTasks.add(subTask);
+        });
 
         JsonArray history = source.get("history").getAsJsonArray();
 

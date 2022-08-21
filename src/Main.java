@@ -39,7 +39,8 @@ public class Main {
         manager.findTasksById(4);
         manager.findEpicById(5);
 //        Создаем новый HttpManager через метод loadFromServer и проверяем состояние
-//        HttpTaskManager newManager = manager.loadFromServer("taskManager");
-//        System.out.println(newManager.getHistory());
+        HttpTaskManager newManager = manager.loadFromServer("taskManager");
+        System.out.println(newManager.getHistory());
+        System.out.println(newManager.getPrioritizedTasks());
     }
 }

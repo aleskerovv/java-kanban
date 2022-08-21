@@ -28,7 +28,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public static void main(String[] args) throws ManagerSaveException, FileNotFoundException {
         //Создаем FileBackedTaskManager, создаем и записываем в него Задачи
         final File filePath = new File("tasks.csv");
-        FileBackedTasksManager manager = new FileBackedTasksManager(filePath);
+/*        FileBackedTasksManager manager = new FileBackedTasksManager(filePath);
         Task task1 = new Task("Первая таска", "описание", NEW, 50, LocalDateTime.parse("2022-08-01T11:10:00"));
         Task task2 = new Task("Вторая таска", "описание", DONE, 50);
         Task task3 = new Task("Третья таска", "описание", IN_PROGRESS, 60, LocalDateTime.parse("2022-08-09T12:30:00"));
@@ -42,7 +42,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         manager.createTask(task4);
         manager.createEpic(epic1);
         manager.createSubtask(subTask1);
-        manager.createSubtask(subTask2);
+        manager.createSubtask(subTask2);*/
 //        manager.deleteTaskById(3);
 //        System.out.println(manager.getPrioritizedTasks());
 //        //Удаляем сабтаски у Эпика и проверяем, что сбросилось duration, startTime, endTime

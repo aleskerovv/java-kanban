@@ -12,7 +12,7 @@ import static entity.TaskStatus.*;
 import static entity.TaskType.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final Map<Integer, Task> taskManager;
+    protected final Map<Integer, Task> taskManager;
     protected final HistoryManager historyManager = Managers.getDefaultHistory();
     private int id = 0;
     protected Set<Task> sortedTasks = new TreeSet<>((o1, o2) -> {

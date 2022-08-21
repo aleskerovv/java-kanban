@@ -47,7 +47,6 @@ public class KvTaskClient {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             body = response.body();
-            System.out.println(body);
         } catch (IOException | InterruptedException e) { // обрабатываем ошибки отправки запроса
             System.out.println("An error occurred while executing the request.\n" +
                     "Endpoint must be '/load'");
