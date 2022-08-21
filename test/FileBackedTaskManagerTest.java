@@ -20,14 +20,14 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTasksManager> 
         test.createEntityFromText();
         Epic epicTest1 = test.findEpicById(3);
 
-        assertEquals(epic1, epicTest1);
+        assertEquals(super.epic1, epicTest1);
     }
 
     @Test
     void checkHistorySave() {
-        manager.findTasksById(1);
+        super.manager.findTasksById(1);
 
-        assertEquals(1, manager.getHistory().size());
+        assertEquals(1, super.manager.getHistory().size());
     }
 
     @Test
@@ -43,7 +43,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTasksManager> 
 
     @Test
     void checkEmptyHistory() {
-        List<Task> returnedList = manager.getHistory();
+        List<Task> returnedList = super.manager.getHistory();
 
         assertEquals(0, returnedList.size());
     }

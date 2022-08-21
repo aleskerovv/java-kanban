@@ -8,7 +8,6 @@ import entity.SubTask;
 import entity.Task;
 import kv_task_client.KvTaskClient;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +22,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
     String json;
     static final String KEY = "taskManager";
 
-    public HttpTaskManager(String url) {
+    public HttpTaskManager(String url) throws IOException, InterruptedException {
         mtj = new ManagerToJson();
         this.url = url;
         this.gson = new GsonBuilder()
@@ -52,7 +51,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
         mtj.setHistory(history);
     }
 
-    public HttpTaskManager loadFromServer(String key) throws IOException {
+    public HttpTaskManager loadFromServer(String key) throws IOException, InterruptedException {
         HttpTaskManager httpManager = Managers.getDefault(url);
         String json = client.load(key);
 

@@ -66,7 +66,7 @@ public class SubTask extends Task {
                 ", status=" + status +
                 ", type=" + type +
                 ", duration=" + duration +
-                ", startTime=" + startTime + " мин." +
+                ", startTime=" + startTime +
                 ", endTime=" + getEndTime() +
                 ", epicId=" + epicId +
                 '}';

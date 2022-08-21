@@ -8,7 +8,7 @@ public class Managers {
     private Managers() {
     }
 
-    public static HttpTaskManager getDefault(String url) throws IOException {
+    public static HttpTaskManager getDefault(String url) throws IOException, InterruptedException {
         return new HttpTaskManager(url);
     }
 

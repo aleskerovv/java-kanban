@@ -1,4 +1,4 @@
-package manager;
+package exceptions;
 
 public class TaskValidationException extends RuntimeException {
     public TaskValidationException(String message) {

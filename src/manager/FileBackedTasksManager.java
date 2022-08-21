@@ -1,6 +1,7 @@
 package manager;
 
 import entity.*;
+import exceptions.ManagerSaveException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

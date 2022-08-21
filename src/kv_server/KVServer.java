@@ -6,15 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
@@ -35,14 +28,14 @@ public class KVServer {
     private void load(HttpExchange h) throws IOException {
         try {
             if (!hasAuth(h)) {
-                System.out.println("Запрос неавторизован, нужен параметр в query API_TOKEN со значением апи-ключа");
+                System.out.println("Request is unauthorized, expects query parameter API_TOKEN with api-key value");
                 h.sendResponseHeaders(403, 0);
                 return;
             }
             if ("GET".equals(h.getRequestMethod())) {
                 String key = h.getRequestURI().getPath().substring("/load/".length());
                 if (key.isEmpty()) {
-                    System.out.println("Key для сохранения пустой. key указывается в пути: /load/{key}");
+                    System.out.println("Key for 'load' is empty. key expect in request path: /load/{key}");
                     h.sendResponseHeaders(400, 0);
                     return;
                 }
@@ -51,7 +44,7 @@ public class KVServer {
                     os.write(data.get(key).getBytes());
                 }
             } else {
-                System.out.println("/load ждёт GET-запрос, а получил: " + h.getRequestMethod());
+                System.out.println("/load expects GET-request, received: " + h.getRequestMethod());
                 h.sendResponseHeaders(405, 0);
             }
         } finally {
@@ -62,20 +55,20 @@ public class KVServer {
     private void save(HttpExchange h) throws IOException {
         try {
             if (!hasAuth(h)) {
-                System.out.println("Запрос неавторизован, нужен параметр в query API_TOKEN со значением апи-ключа");
+                System.out.println("Request is unauthorized, expects query parameter API_TOKEN with api-key value");
                 h.sendResponseHeaders(403, 0);
                 return;
             }
             if ("POST".equals(h.getRequestMethod())) {
                 String key = h.getRequestURI().getPath().substring("/save/".length());
                 if (key.isEmpty()) {
-                    System.out.println("Key для сохранения пустой. key указывается в пути: /save/{key}");
+                    System.out.println("Key for 'save' is empty. key expect in request path: /save/{key}");
                     h.sendResponseHeaders(400, 0);
                     return;
                 }
                 String value = readText(h);
                 if (value.isEmpty()) {
-                    System.out.println("Value для сохранения пустой. value указывается в теле запроса");
+                    System.out.println("Value for 'save' is empty. value expects in request's body");
                     h.sendResponseHeaders(400, 0);
                     return;
                 }
@@ -85,7 +78,7 @@ public class KVServer {
                     os.write(data.get(key).getBytes());
                 }
             } else {
-                System.out.println("/save ждёт POST-запрос, а получил: " + h.getRequestMethod());
+                System.out.println("/save expects POST-request, received: " + h.getRequestMethod());
                 h.sendResponseHeaders(405, 0);
             }
         } finally {
@@ -95,11 +88,10 @@ public class KVServer {
 
     private void register(HttpExchange h) throws IOException {
         try {
-            System.out.println("\n/register");
             if ("GET".equals(h.getRequestMethod())) {
                 sendText(h, apiToken);
             } else {
-                System.out.println("/register ждёт GET-запрос, а получил " + h.getRequestMethod());
+                System.out.println("/register expects GET-request, received " + h.getRequestMethod());
                 h.sendResponseHeaders(405, 0);
             }
         } finally {
@@ -108,8 +100,7 @@ public class KVServer {
     }
 
     public void start() {
-        System.out.println("Запускаем KVServer сервер на порту " + PORT);
-        System.out.println("Открой в браузере http://localhost:" + PORT + "/");
+        System.out.println("Starting KeyValueServer on port: " + PORT);
         System.out.println("API_TOKEN: " + apiToken);
         server.start();
     }
@@ -136,23 +127,5 @@ public class KVServer {
 
     public void stop() {
         server.stop(1000);
-    }
-
-    static class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
-        private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-
-        @Override
-        public void write(final JsonWriter jsonWriter, final LocalDateTime localDateTime) throws IOException {
-            if (localDateTime != null) {
-                jsonWriter.value(localDateTime.format(formatter));
-            } else {
-                jsonWriter.nullValue();
-            }
-        }
-
-        @Override
-        public LocalDateTime read(final JsonReader jsonReader) throws IOException {
-            return LocalDateTime.parse(jsonReader.nextString(), formatter);
-        }
     }
 }

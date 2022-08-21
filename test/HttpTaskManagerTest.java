@@ -1,6 +1,3 @@
-import entity.Epic;
-import entity.SubTask;
-import entity.Task;
 import kv_server.KVServer;
 import manager.HttpTaskManager;
 import manager.Managers;
@@ -8,15 +5,11 @@ import manager.TaskManager;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-
-import static entity.TaskStatus.DONE;
-import static entity.TaskStatus.NEW;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HttpTaskManagerTest extends TaskManagerTest<TaskManager> {
-    public HttpTaskManagerTest() throws IOException {
-        manager = Managers.getDefault("http://localhost:8078");
+    public HttpTaskManagerTest() throws IOException, InterruptedException {
+        super.manager = Managers.getDefault("http://localhost:8078");
     }
     @BeforeAll
     static void start() throws IOException {
@@ -24,10 +17,10 @@ class HttpTaskManagerTest extends TaskManagerTest<TaskManager> {
     }
 
     @Test
-    void shouldReturnHttpManagerState() throws IOException {
+    void shouldReturnHttpManagerState() throws IOException, InterruptedException {
         //creating new manager by URL
         HttpTaskManager newManager = Managers.getDefault("http://localhost:8078");
-        newManager.createTask(task1);
+        newManager.createTask(super.task1);
         //load manager state by httpManager method
         HttpTaskManager test = newManager.loadFromServer("taskManager");
 
@@ -37,11 +30,11 @@ class HttpTaskManagerTest extends TaskManagerTest<TaskManager> {
     }
 
     @Test
-    void shouldReturnEpicsList() throws IOException {
+    void shouldReturnEpicsList() throws IOException, InterruptedException {
         //creating new manager by URL
         HttpTaskManager newManager = Managers.getDefault("http://localhost:8078");
-        newManager.createEpic(epic1);
-        newManager.createEpic(epic2);
+        newManager.createEpic(super.epic1);
+        newManager.createEpic(super.epic2);
         //load manager state by httpManager method
         HttpTaskManager test = newManager.loadFromServer("taskManager");
 

@@ -9,14 +9,18 @@ import java.net.http.HttpResponse;
 public class KvTaskClient {
     String url;
     HttpClient client;
+    private String token;
 
-    public KvTaskClient(String url) {
+    public KvTaskClient(String url) throws IOException, InterruptedException {
         this.url = url;
         this.client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url + "/register")).GET().build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        this.token = response.body();
     }
 
     public void put(String key, String json) {
-        URI uri = URI.create(url + "/save/" + key + "?API_TOKEN=DEBUG");
+        URI uri = URI.create(url + "/save/" + key + "?API_TOKEN=" + token);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
@@ -24,7 +28,7 @@ public class KvTaskClient {
                 .build();
 
         try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) { // обрабатываем ошибки отправки запроса
             System.out.println("An error occurred while executing the request.\n" +
                     "Endpoint must be '/save'");
@@ -33,7 +37,7 @@ public class KvTaskClient {
 
     public String load(String key) {
         String body = "";
-        URI uri = URI.create(url + "/load/" + key + "?API_TOKEN=DEBUG");
+        URI uri = URI.create(url + "/load/" + key + "?API_TOKEN=" + token);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
@@ -43,6 +47,7 @@ public class KvTaskClient {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             body = response.body();
+            System.out.println(body);
         } catch (IOException | InterruptedException e) { // обрабатываем ошибки отправки запроса
             System.out.println("An error occurred while executing the request.\n" +
                     "Endpoint must be '/load'");

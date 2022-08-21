@@ -140,7 +140,7 @@ public class Task {
                 ", id=" + id +
                 ", status=" + status +
                 ", type=" + type +
-                ", duration=" + duration + " мин." +
+                ", duration=" + duration +
                 ", startTime=" + startTime +
                 ", endTime=" + getEndTime() +
                 '}';
