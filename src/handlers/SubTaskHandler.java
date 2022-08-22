@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import entity.SubTask;
 import entity.TaskType;
+import exceptions.TaskNotFoundException;
 import manager.FileBackedTasksManager;
 import exceptions.TaskValidationException;
 
@@ -20,9 +21,9 @@ import java.util.Map;
 import static handlers.QueryMapper.queryMapper;
 
 public class SubTaskHandler implements HttpHandler {
-    private GsonBuilder gb = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-    private final Gson gson = gb.create();
-    FileBackedTasksManager manager;
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+            .create();
+    private final FileBackedTasksManager manager;
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
     public SubTaskHandler(FileBackedTasksManager manager) {
@@ -31,10 +32,11 @@ public class SubTaskHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        String response;
+        String response = "";
         String method = httpExchange.getRequestMethod();
         String query = httpExchange.getRequestURI().getQuery();
         Map<String, String> queryMap = queryMapper(query);
+        httpExchange.getResponseHeaders().add("Content-Type", "application/json; charset=utf-8");
 
         switch (method) {
             case "GET":
@@ -47,22 +49,17 @@ public class SubTaskHandler implements HttpHandler {
                     try {
                         response = gson.toJson(manager.getEpicsSubTasks(id));
                         httpExchange.sendResponseHeaders(200, 0);
-                    } catch (NullPointerException e) {
-                        response = "Subtask with id " + id + " does not exists";
-                        httpExchange.sendResponseHeaders(400, 0);
+                    } catch (TaskNotFoundException e) {
+                        httpExchange.sendResponseHeaders(404, 0);
                     }
                 } else {
                     int id = Integer.parseInt(queryMap.get("id"));
-                    try {
-                        response = gson.toJson(manager.findSubTasksById(id));
+                    if (gson.toJson(manager.findSubTasksById(id)).equals("null")) {
+                        httpExchange.sendResponseHeaders(404, 0);
+                    } else {
                         httpExchange.sendResponseHeaders(200, 0);
-                    } catch (NullPointerException e) {
-                        response = "Subtask with id " + id + " does not exists";
-                        httpExchange.sendResponseHeaders(400, 0);
+                        response = gson.toJson(manager.findSubTasksById(id));
                     }
-                }
-                try (OutputStream os = httpExchange.getResponseBody()) {
-                    os.write(response.getBytes());
                 }
                 break;
             case "DELETE":
@@ -74,11 +71,9 @@ public class SubTaskHandler implements HttpHandler {
                     try {
                         manager.deleteSubTaskById(id);
                         httpExchange.sendResponseHeaders(200, 0);
-                    } catch (NullPointerException e) {
+                    } catch (TaskNotFoundException e) {
                         httpExchange.sendResponseHeaders(400, 0);
                     }
-                }
-                try (OutputStream os = httpExchange.getResponseBody()) {
                 }
                 break;
             case "POST":
@@ -87,15 +82,11 @@ public class SubTaskHandler implements HttpHandler {
                 if (body.contains("\"id\"")) {
                     try {
                         SubTask subTask = gson.fromJson(body, SubTask.class);
-                        subTask.setType(TaskType.SUBTASK);
                         manager.updateSubTask(subTask);
                         httpExchange.sendResponseHeaders(200, 0);
                     } catch (TaskValidationException e) {
                         httpExchange.sendResponseHeaders(400, 0);
                         response = e.getMessage();
-                        try (OutputStream os = httpExchange.getResponseBody()) {
-                            os.write(response.getBytes());
-                        }
                     }
                 } else {
                     try {
@@ -106,9 +97,10 @@ public class SubTaskHandler implements HttpHandler {
                         httpExchange.sendResponseHeaders(400, 0);
                     }
                 }
-                try (OutputStream os = httpExchange.getResponseBody()) {
-                }
                 break;
+        }
+        try (OutputStream os = httpExchange.getResponseBody()) {
+            os.write(response.getBytes());
         }
     }
 }

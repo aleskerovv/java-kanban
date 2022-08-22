@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class PrioritizedTasksHandler implements HttpHandler {
     private final GsonBuilder gb = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
     private final Gson gson = gb.create();
-    FileBackedTasksManager manager;
+    private final FileBackedTasksManager manager;
 
     public PrioritizedTasksHandler(FileBackedTasksManager manager) {
         this.manager = manager;
@@ -21,22 +21,19 @@ public class PrioritizedTasksHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        String response;
+        String response = "";
         String method = httpExchange.getRequestMethod();
         switch (method) {
             case "GET":
                 httpExchange.sendResponseHeaders(200, 0);
                 response = gson.toJson(manager.getPrioritizedTasks());
-
-                try (OutputStream os = httpExchange.getResponseBody()) {
-                    os.write(response.getBytes());
-                }
                 break;
             default:
                 httpExchange.sendResponseHeaders(405, 0);
-                try (OutputStream os = httpExchange.getResponseBody()) {
-                }
                 break;
+        }
+        try (OutputStream os = httpExchange.getResponseBody()) {
+            os.write(response.getBytes());
         }
     }
 }

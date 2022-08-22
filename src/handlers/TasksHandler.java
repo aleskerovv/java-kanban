@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import entity.Task;
 import entity.TaskType;
+import exceptions.TaskNotFoundException;
 import manager.FileBackedTasksManager;
 import exceptions.TaskValidationException;
 
@@ -21,8 +22,8 @@ import static handlers.QueryMapper.queryMapper;
 
 public class TasksHandler implements HttpHandler {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private final GsonBuilder gb = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-    private final Gson gson = gb.create();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+            .create();
     FileBackedTasksManager manager;
 
     public TasksHandler(FileBackedTasksManager manager) {
@@ -31,7 +32,7 @@ public class TasksHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        String response;
+        String response = "";
         String method = httpExchange.getRequestMethod();
         String query = httpExchange.getRequestURI().getQuery();
         Map<String, String> queryMap = queryMapper(query);
@@ -43,17 +44,12 @@ public class TasksHandler implements HttpHandler {
                     httpExchange.sendResponseHeaders(200, 0);
                 } else {
                     int id = Integer.parseInt(queryMap.get("id"));
-                    try {
+                    if (gson.toJson(manager.findTasksById(id)).equals("null")) {
+                        httpExchange.sendResponseHeaders(404, 0);
+                    } else {
                         response = gson.toJson(manager.findTasksById(id));
                         httpExchange.sendResponseHeaders(200, 0);
-                    } catch (NullPointerException e) {
-                        response = "Task with id " + id + " does not exists";
-                        httpExchange.sendResponseHeaders(400, 0);
-
                     }
-                }
-                try (OutputStream os = httpExchange.getResponseBody()) {
-                    os.write(response.getBytes());
                 }
                 break;
             case "DELETE":
@@ -65,11 +61,10 @@ public class TasksHandler implements HttpHandler {
                     try {
                         manager.deleteTaskById(id);
                         httpExchange.sendResponseHeaders(200, 0);
-                    } catch (NullPointerException e) {
-                        httpExchange.sendResponseHeaders(400, 0);
+                    } catch (TaskNotFoundException e) {
+                        response = e.getMessage();
+                        httpExchange.sendResponseHeaders(404, 0);
                     }
-                }
-                try (OutputStream os = httpExchange.getResponseBody()) {
                 }
                 break;
             case "POST":
@@ -84,9 +79,6 @@ public class TasksHandler implements HttpHandler {
                     } catch (TaskValidationException e) {
                         httpExchange.sendResponseHeaders(400, 0);
                         response = e.getMessage();
-                        try (OutputStream os = httpExchange.getResponseBody()) {
-                            os.write(response.getBytes());
-                        }
                     }
                 } else {
                     try {
@@ -97,9 +89,10 @@ public class TasksHandler implements HttpHandler {
                         httpExchange.sendResponseHeaders(400, 0);
                     }
                 }
-                try (OutputStream os = httpExchange.getResponseBody()) {
-                }
                 break;
+        }
+        try (OutputStream os = httpExchange.getResponseBody()) {
+            os.write(response.getBytes());
         }
     }
 }

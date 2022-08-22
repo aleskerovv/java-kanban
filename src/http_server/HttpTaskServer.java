@@ -20,7 +20,6 @@ public class HttpTaskServer {
         server.createContext("/tasks/epic", new EpicHandler(manager));
         server.createContext("/tasks/subtask", new SubTaskHandler(manager));
         server.createContext("/tasks/history", new HistoryHandler(manager));
-        manager.createEntityFromText();
     }
 
     public void start() {
@@ -30,6 +29,6 @@ public class HttpTaskServer {
     }
 
     public void stop() {
-        server.stop(10);
+        server.stop(1);
     }
 }

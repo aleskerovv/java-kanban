@@ -81,7 +81,6 @@ class HttpTaskServerTest {
         URI taskById = URI.create("http://localhost:8080/tasks/task/?id=1");
         request = HttpRequest.newBuilder().uri(taskById).GET().build();
         response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        manager.createEntityFromText();
         Task fromJson = gson.fromJson(response.body(), Task.class);
         assertEquals(manager.findTasksById(1), fromJson);
     }
@@ -113,7 +112,6 @@ class HttpTaskServerTest {
         URI epicById = URI.create("http://localhost:8080/tasks/epic/?id=1");
         request = HttpRequest.newBuilder().uri(epicById).GET().build();
         response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        manager.createEntityFromText();
         Epic fromJson = gson.fromJson(response.body(), Epic.class);
         assertEquals(manager.findEpicById(1), fromJson);
     }

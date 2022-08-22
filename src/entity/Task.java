@@ -124,14 +124,6 @@ public class Task {
         return startTime;
     }
 
-//    public void setStartTime(String startTime) {
-//        if (startTime == null) {
-//            this.startTime = null;
-//        } else {
-//            this.startTime = LocalDateTime.parse(startTime);
-//        }
-//    }
-
     @Override
     public String toString() {
         return "Task{" +

@@ -126,6 +126,6 @@ public class KVServer {
     }
 
     public void stop() {
-        server.stop(1000);
+        server.stop(100);
     }
 }
