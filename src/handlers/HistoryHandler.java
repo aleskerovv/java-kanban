@@ -23,6 +23,7 @@ public class HistoryHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
         String response = "";
         String method = httpExchange.getRequestMethod();
+        httpExchange.getResponseHeaders().add("Content-Type", "application/json; charset=utf-8");
 
         switch (method) {
             case "GET":

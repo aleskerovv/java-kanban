@@ -24,7 +24,7 @@ public class TasksHandler implements HttpHandler {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .create();
-    FileBackedTasksManager manager;
+    private final FileBackedTasksManager manager;
 
     public TasksHandler(FileBackedTasksManager manager) {
         this.manager = manager;
@@ -36,6 +36,7 @@ public class TasksHandler implements HttpHandler {
         String method = httpExchange.getRequestMethod();
         String query = httpExchange.getRequestURI().getQuery();
         Map<String, String> queryMap = queryMapper(query);
+        httpExchange.getResponseHeaders().add("Content-Type", "application/json; charset=utf-8");
 
         switch (method) {
             case "GET":
